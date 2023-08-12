@@ -1,5 +1,4 @@
-Hello. I have dyscalculia, so maths is very difficult for me. That's why I have this question:
-
+Necessary information:
 A heat exchanger draws heat out of a cooling loop flowing 20 liters per minute, the initial temperature of the water is 40 degrees Celsius. The cooling loop itself is not modeled in the attached link, but it is made of 6x 4 meter long pipes in parallel, each pipe has a diameter of 10mm. Total volume of coolant: 72 liters. The pipes are made of PVC with 10 mm ØID x 13 mm ØOD. 
 The cooling loop is heated by 100W.
 The heat exhanger has space for 4x  peltier elements that measures 40x40mm to draw heat out and into a perfect, infinite heat sink. The heat exhanger is made of aluminium, and has a internal surface of: 681.41square cm.
