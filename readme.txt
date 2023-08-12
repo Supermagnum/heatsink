@@ -7,7 +7,7 @@ Elapsed time is 150 seconds. The cooling loop liquid temperature at the end of e
 The ambient temperature is 40 degrees Celsius.
 What is the required amount of watt per peltier element?
 
-The temperature drop across the heat exhanger may also be of interest to me.
+The temperature drop across the heat exhanger may also be of interest to me .
 
 Stl files and blueprints:
 https://github.com/Supermagnum/heatsink
@@ -27,4 +27,6 @@ Peltier elements is solid state,and the way to go.
 They can be PWM controlled.
 
 One could implement a PID loop to control the peltiers, and PWM control for the coolant pump, maybe combined with one or two temperature sensors in the coolant suit loop.
-Theres no mention of the current draw, but say it pulls 8 Amps. To get Amp hours one just goes 8 X 6=48Ah. A 12 volt 48Ah LiFePo4 weights 5.5 kilos ( 12 lbs), and will keep you cool for 6 hours. LiFePo4 batteries are pretty safe, but the safest batteries are of the Lithium-titanate type. One can even get invidual cells, round or flat. One could put such a device inside a Stormtrooper suit and have one of those with a real, working cooling unit!
+Say a peltier element pulls 8 Amps. To get Amp hours one just goes 8 X 6=48Ah. A 12 volt 48Ah LiFePo4 weights 5.5 kilos ( 12 lbs), and will keep you cool for 6 hours. LiFePo4 batteries are pretty safe, but the safest batteries are of the Lithium-titanate type. One can even get invidual cells, round or flat. 
+
+One could put such a device inside a Stormtrooper suit and have one of those with a real, working cooling unit!
