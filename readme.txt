@@ -1,12 +1,26 @@
-Necessary information:
-A heat exchanger draws heat out of a cooling loop flowing 20 liters per minute, the initial temperature of the water is 40 degrees Celsius. The cooling loop itself is not modeled in the attached link, but it is made of 6x 4 meter long hoses in parallel. Total volume of coolant: 2.71 liters. The hoses are made of PVC with 6 mm ØID x 9 mm ØOD. 
-The cooling loop is heated by 100W.
-The heat exhanger has space for 4x  peltier elements that measures 40x40mm to draw heat out and into a perfect, infinite heat sink. The heat exhanger is made of aluminium, and has a internal surface of: 681.41square cm.
-Elapsed time is 150 seconds. The cooling loop liquid temperature at the end of elapsed time is 18 degrees Celsius
-The ambient temperature is 40 degrees Celsius.
-What is the required amount of watt per peltier element?
+A cooling suit idea:
 
-The temperature drop across the heat exhanger may also be of interest to me .
+It needs a aluminium heat exhanger, that is connected to a cooling loop sewn into a spandex suit. The cooling loop is made of 
+6 hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water. 
+
+The aluminum heat exchanger has an internal surface of 681.41 square cm. 
+It has a 10mm thick bottom, top and walls. It has connected 6 PVC hoses in parallel.
+
+Thermal calculation: 
+One cools 3 liters of water from 40 degrees to 18 degrees in 150 seconds. How much heat must be removed: Q = mc∆T m = 3 kg. specific heat capacity of water is 4.18 J/g°C. And we know that the temperature change of the water is 40 - 18 = 22 °C. 
+
+So by entering these values into the formula we get: Q = 3 kg x 4.18 J/g°C x 22 °C Q = 2794.6 J 
+
+This means that the heat exchanger removes 2794.6 joules of heat from the cooling loop in 150 seconds. 
+
+P is required to remove this amount of heat using Peltier elements. We can use another formula: P = Q / t where P is the power in watts, Q is the heat transfer in joules, and t is the time in seconds. P = Q / t P = 2794.6 J / 150 s ≈ 18.6 watts 
+
+However, this is not the actual effect the Peltier elements must have as a minimum, because they are not 100% efficient. In fact, they use more power than they pump, because some of the input power is converted into waste heat on both sides of the element. 
+
+The COP can be calculated using a complex formula involving many parameters, or it can be obtained from a data sheet from the manufacturer of the Peltier element. 
+
+For simplicity, let's assume we have a typical Peltier element with a COP of about 0.53. So, dividing watts by COP, we get: P / COP = 18.63 / 0.5 ≈ 37.2 W Since there are four Peltier elements in the heat exchanger, one can divide this power by four to get watts per element: P / COP / 4 = 37.26 / 4 ≈ 9.3 So each Peltier element needs about 9.31 watts to cool the cooling loop from 40°C to 18°C in 150 seconds. As the cooling loop is heated with 100W, you must have peltier elements with a minimum power of 150W in total. Those 100W are what a human body generates at maximum.
+These calculations does not include cooling losses to the environment.
 
 Stl files and blueprints:
 https://github.com/Supermagnum/heatsink
