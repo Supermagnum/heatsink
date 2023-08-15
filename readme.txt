@@ -1,10 +1,10 @@
 A cooling suit idea:
 
 It needs a aluminium heat exhanger, that is connected to a cooling loop sewn into a spandex suit. The cooling loop is made of 
-6 hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water. 
+6 hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water/glycol mix. 
 
-TThermal calculation:
-One cools 3 liters of water from 40 degrees to 18 degrees in 150 seconds.
+Thermal calculation:
+One cools 3 liters of water/glycol from 40 degrees to 18 degrees in 150 seconds.
 
 How much heat must be removed:
 Q = mc∆T
@@ -73,7 +73,7 @@ Converting grams to kilograms:
 
 m ≈ 1.65663 kg
 
-So, approximately 1.66 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water at 40 degrees Celsius over a period of 150 seconds. 
+So, approximately 1.66 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water/glycol mix at 40 degrees Celsius over a period of 150 seconds. 
 
 Now, when the coolant has reached 18 degrees Celsius say we want to keep it there for 4 hours as a example.
 
@@ -92,11 +92,14 @@ So, around 4 kilos of ice is needed.
 
 Keep in mind that this calculation assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
 
+
 How does one keep the temperature of the coolant at 18 degrees Celsius?
 
 One can use a automotive NTC temperature sensor like this, and a arduino to control the temperature:
 https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf
 One then can monitor the temperature of the suits output and use PWM control to  control the speed of a pump.
+
+Why water/glycol mix? So that the liquid in the coolant loop does not freeze or turn to slush in the heat exchanger.
 
 
 what it will be used for:
