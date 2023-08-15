@@ -3,27 +3,101 @@ A cooling suit idea:
 It needs a aluminium heat exhanger, that is connected to a cooling loop sewn into a spandex suit. The cooling loop is made of 
 6 hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water. 
 
-The aluminum heat exchanger has an internal surface of 681.41 square cm. 
-It has a 10mm thick bottom, top and walls. It has connected 6 PVC hoses in parallel.
+TThermal calculation:
+One cools 3 liters of water from 40 degrees to 18 degrees in 150 seconds.
 
-Thermal calculation: 
-One cools 3 liters of water from 40 degrees to 18 degrees in 150 seconds. How much heat must be removed: Q = mc∆T m = 3 kg. specific heat capacity of water is 4.18 J/g°C. And we know that the temperature change of the water is 40 - 18 = 22 °C. 
+How much heat must be removed:
+Q = mc∆T
+m = 3 kg.
 
-So by entering these values into the formula we get: Q = 3 kg x 4.18 J/g°C x 22 °C Q = 2794.6 J 
+specific heat capacity of water is 4.18 J/g°C, one liter of water is 1000 grams.
 
-This means that the heat exchanger removes 2794.6 joules of heat from the cooling loop in 150 seconds. 
+And we know that the temperature change of the water is 40 - 18 = 22 °C.
 
-P is required to remove this amount of heat using Peltier elements. We can use another formula: P = Q / t where P is the power in watts, Q is the heat transfer in joules, and t is the time in seconds. P = Q / t P = 2794.6 J / 150 s ≈ 18.6 watts 
+So by entering these values into the formula we get:
+Q = 3 kg x 4180 J/kg°C x 22 °C Q = 277,320 J
 
-However, this is not the actual effect the Peltier elements must have as a minimum, because they are not 100% efficient. In fact, they use more power than they pump, because some of the input power is converted into waste heat on both sides of the element. 
+This means that the heat exchanger removes 277,320 joules of heat from the cooling loop in 150 seconds.
 
-The COP can be calculated using a complex formula involving many parameters, or it can be obtained from a data sheet from the manufacturer of the Peltier element. 
+Peltier cooling;
+P is required to remove this amount of heat using Peltier elements. We can use another formula: P = Q / t where P is the power in watts, Q is the heat transfer in joules, and t is the time in seconds.
+P = Q / t P = 277,320 / 150 s ≈ 1848.8 watts
 
-For simplicity, let's assume we have a typical Peltier element with a COP of about 0.53. So, dividing watts by COP, we get: P / COP = 18.63 / 0.5 ≈ 37.2 W Since there are four Peltier elements in the heat exchanger, one can divide this power by four to get watts per element: P / COP / 4 = 37.26 / 4 ≈ 9.3 So each Peltier element needs about 9.31 watts to cool the cooling loop from 40°C to 18°C in 150 seconds. As the cooling loop is heated with 100W, you must have peltier elements with a minimum power of 150W in total. Those 100W are what a human body generates at maximum.
-These calculations does not include cooling losses to the environment.
+However, this is not the actual effect the Peltier elements must have as a minimum, because they are not 100% efficient. In fact, they use more power than they transmit, because some of the input power is converted into waste heat on both sides of the element.
 
-Stl files and blueprints:
-https://github.com/Supermagnum/heatsink
+The COP can be calculated using a complex formula involving many parameters, or it can be obtained from a data sheet from the manufacturer of the Peltier element. For simplicity, let's assume we have a typical Peltier element with a COP of about 0.53.
+So, dividing watts by COP, we get: P / COP = 1848.8 / 0.5 ≈ 1848.8 W
+
+Since there are four Peltier elements in the heat exchanger, one can divide this power by four to get watts per element:
+P / COP / 4 = 1848.8 / 4 ≈ 462.2
+
+So each Peltier element needs about 462.2 watts to cool down the cooling loop from 40°C to 18°C in 150 seconds.
+
+As the cooling loop is heated with 100W, you must have peltier elements with a minimum power of a total of 562 W.
+That is going to need some serious amount of power, the battery will be expensive, and  the  Peltier elements also.
+
+
+How if one instead uses ice as a cooling medium for the coolant loop?
+
+To calculate the amount of ice needed to remove 1848.8 watts of energy from 3 liters of water at 40 degrees Celsius over a period of 150 seconds, we can use the formula:
+
+Q = P * t
+
+Where:
+Q = Heat energy (in Joules)
+P = Power (in watts)
+t = Time (in seconds)
+
+Given that P = 1848.8 watts and t = 150 seconds, we can calculate Q:
+
+Q = 1848.8 W * 150 s
+Q = 277320 J
+
+Now, let's use the specific heat capacity formula to determine the mass of water being cooled:
+
+Q = m * c * ΔT
+
+Where:
+Q = Heat energy (in Joules) = 277320 J
+m = Mass of the substance (in kilograms)
+c = Specific heat capacity of water (approximately 4.18 J/g°C)
+ΔT = Change in temperature (final temperature - initial temperature)
+
+We know that the initial temperature of water is 40°C and it's being cooled to 0°C (assuming ice temperature). Solving for the mass (m):
+
+m = Q / (c * ΔT)
+m = 277320 J / (4.18 J/g°C * 40°C)
+m ≈ 1656.63 g
+
+Converting grams to kilograms:
+
+m ≈ 1.65663 kg
+
+So, approximately 1.66 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water at 40 degrees Celsius over a period of 150 seconds. 
+
+Now, when the coolant has reached 18 degrees Celsius say we want to keep it there for 4 hours as a example.
+
+To calculate the amount of ice needed, we can use the formula:(Q = m \cdot c \cdot \Delta T),
+where:
+(Q) is the heat absorbed by the ice (in Joules),
+(m) is the mass of the ice (in kilograms),(c) is the specific heat capacity of ice (about 2.09 J/g°C),
+(\Delta T) is the temperature change (in °C).
+
+Given that the temperature change is from 0°C to -18°C, we have (\Delta T = -18°C - 0°C = -18°C).
+
+The heat (Q) absorbed by the ice is also given by:
+(Q = P \cdot t),where:(P) is the power (100W),(t) is the time (4 hours, which is 14,400 seconds).
+
+So, around 4 kilos of ice is needed.
+
+Keep in mind that this calculation assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
+
+How does one keep the temperature of the coolant at 18 degrees Celsius?
+
+One can use a automotive NTC temperature sensor like this, and a arduino to control the temperature:
+https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf
+One then can monitor the temperature of the suits output and use PWM control to  control the speed of a pump.
+
 
 what it will be used for:
 
@@ -35,11 +109,4 @@ If anyone has seen the apollo 13 movie, the boxes carried by the astronauts on t
 That box also provides O2.
 I think that NASA just used ice water in those boxes, and you need the capacity to at least transport 200W because the human body generates about 100W. One could rip out the heat exhanger from a car, the bit who heats air, make the suit out of spandex and sew in 7 parallel loops. Hook that up to a aquarium pump or similar, and the heat exhanger that goes in a bucket of ice cubes and water. 
 
-The issue with that is that the ice will melt,  and a ac compressor doesn't work if it is turned sideways.
-Peltier elements is solid state,and the way to go.
-They can be PWM controlled.
 
-One could implement a PID loop to control the peltiers, and PWM control for the coolant pump, maybe combined with one or two temperature sensors in the coolant suit loop.
-Say a peltier element pulls 8 Amps. To get Amp hours one just goes 8 X 6=48Ah. A 12 volt 48Ah LiFePo4 weights 5.5 kilos ( 12 lbs), and will keep you cool for 6 hours. LiFePo4 batteries are pretty safe, but the safest batteries are of the Lithium-titanate type. One can even get invidual cells, round or flat. 
-
-One could put such a device inside a Stormtrooper suit and have one of those with a real, working cooling unit!
