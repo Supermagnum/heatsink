@@ -43,7 +43,7 @@ P / COP / 4 = 1848.8 / 4 ≈ 462.2
 So each Peltier element needs about 462.2 watts to cool down the cooling loop from 40°C to 18°C in 150 seconds.
 
 As the cooling loop is heated with 100W, you must have peltier elements with a minimum power of a total of 1848 W.
-That is going to need some serious amount of power, the battery will be expensive,heavy, and  the  Peltier elements expensive.
+That is going to need some serious amount of power, the battery will be expensive,heavy, and  the  Peltier elements are not cheap.
 
 
 How if one instead uses ice as a cooling medium for the coolant loop?
