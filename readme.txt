@@ -1,4 +1,11 @@
 A cooling suit idea:
+https://github.com/Supermagnum/heatsink/blob/main/Orlan_cooling_suit.JPG?raw=true
+That is a cooling suit, used in the lowest layer on space suits.
+It has hoses for circulation of cooling medium. 
+If anyone has seen the apollo 13 movie, the boxes carried by the astronauts on the way to the space capsule is a heat exhanger that provides cooling until the suits can be hooked up to the capsules internal cooling system.
+That box also provides O2.
+
+I think that NASA just used ice in those boxes, and you need the capacity to at least transport 200W because the human body generates about 100W. One could rip out the heat exhanger from a car, the bit who heats air, make the suit out of spandex and sew in loops. Hook that up to a aquarium pump or similar, and the heat exhanger that goes in a bucket of ice cubes and water. 
 
 It needs a aluminium heat exhanger, that is connected to a cooling loop sewn into a spandex suit. The cooling loop is made of 
 6 hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water/glycol mix. 
@@ -77,7 +84,7 @@ So, approximately 1.66 kilograms of ice (equivalent to the mass of water being c
 
 Now, when the coolant has reached 18 degrees Celsius say we want to keep it there for 4 hours as a example.
 
-To calculate the amount of ice needed, we can use the formula:(Q = m \cdot c \cdot \Delta T),
+To calculate the amount of ice needed, we can use the formula:(Q = m \c \Delta T),
 where:
 (Q) is the heat absorbed by the ice (in Joules),
 (m) is the mass of the ice (in kilograms),(c) is the specific heat capacity of ice (about 2.09 J/g°C),
@@ -99,17 +106,10 @@ One can use a automotive NTC temperature sensor like this, and a arduino to cont
 https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf
 One then can monitor the temperature of the suits output and use PWM control to  control the speed of a pump.
 
+
 Why water/glycol mix? So that the liquid in the coolant loop does not freeze or turn to slush in the heat exchanger.
 
 
-what it will be used for:
 
-https://github.com/Supermagnum/heatsink/blob/main/Orlan_cooling_suit.JPG?raw=true
-
-That is a cooling suit, used in the lowest layer on space suits.
-It has hoses for circulation of cooling medium. 
-If anyone has seen the apollo 13 movie, the boxes carried by the astronauts on the way to the space capsule is a heat exhanger that provides cooling until the suits can be hooked up to the capsules internal cooling system.
-That box also provides O2.
-I think that NASA just used ice w in those boxes, and you need the capacity to at least transport 200W because the human body generates about 100W. One could rip out the heat exhanger from a car, the bit who heats air, make the suit out of spandex and sew in loops. Hook that up to a aquarium pump or similar, and the heat exhanger that goes in a bucket of ice cubes and water. 
 
 
