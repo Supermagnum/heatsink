@@ -88,16 +88,17 @@ To calculate the amount of ice needed, we can use the formula:(Q = m \c \Delta T
 where:
 (Q) is the heat absorbed by the ice (in Joules),
 (m) is the mass of the ice (in kilograms),(c) is the specific heat capacity of ice (about 2.09 J/g°C),
-(\Delta T) is the temperature change (in °C).
+∆T is the temperature change (in °C).
 
-Given that the temperature change is from 0°C to -18°C, we have (\Delta T = -18°C - 0°C = -18°C).
+Given that the temperature change is from 0°C to -18°C, we have ∆T = -18°C - 0°C = -18°C).
 
 The heat (Q) absorbed by the ice is also given by:
-(Q = P \cdot t),where:(P) is the power (100W),(t) is the time (4 hours, which is 14,400 seconds).
+(Q = P \c t),where:(P) is the power (100W),(t) is the time (4 hours, which is 14,400 seconds).
 
 So, around 4 kilos of ice is needed.
 
 Keep in mind that this calculation assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
+They also assumes that I haven't made any bloopers.
 
 
 How does one keep the temperature of the coolant at 18 degrees Celsius?
