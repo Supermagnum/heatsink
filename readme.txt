@@ -84,17 +84,7 @@ m ≈ 1.65663 kg
 
 So, approximately 1.66 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water/glycol mix at 40 degrees Celsius over a period of 150 seconds. 
 
-Now, when the coolant has reached 18 degrees Celsius say we want to keep it there for 4 hours as a example.
-
-To calculate the amount of ice needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius, we can use the heat transfer equation:
-
-Q = m * c * ΔT
-
-Where:
-- Q is the heat transfer (in Joules)
-- m is the mass of the water (in kilograms)
-- c is the specific heat capacity of water (approximately 4186 J/kg°C)
-- ΔT is the temperature difference (in degrees Celsius)
+Now, when the coolant has reached 18 degrees Celsius say we want to keep it there.
 
 How one can calculate the amounts of ice needed per hour to keep the coolant liquid at 18 degrees Celsius if the ambient air temperature is 40 degrees Celsius:
 First, we need to calculate the initial temperature difference between the water and the ambient air:
