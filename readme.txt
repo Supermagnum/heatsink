@@ -122,6 +122,7 @@ Keep in mind that these calculations assumes ideal heat transfer and doesn't con
 They also assumes that I haven't made any bloopers.
 
 How does one keep the temperature of the coolant at 18 degrees Celsius, 0 degrees coolant is uncomfortable!
+There's also a risk of hyperthermia!
 
 One can use a automotive NTC temperature sensor like this, and a arduino to control the temperature:
 https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf
