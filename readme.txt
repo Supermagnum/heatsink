@@ -116,6 +116,7 @@ Given that the density of water is approximately 1000 kg/m³, the mass of 3 lite
 m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0.189 kg
 
 So, approximately 0.189 kilograms (189 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
+But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is= 1.8 kg
 
 Keep in mind that these calculations assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
 They also assumes that I haven't made any bloopers.
