@@ -84,7 +84,7 @@ So, approximately 1.66 kilograms of ice (equivalent to the mass of water being c
 
 Now, when the coolant has reached 18 degrees Celsius say we want to keep it there for 4 hours as a example.
 
-To calculate the amount of ice needed, we can use the formula:(Q = m \c \Delta T),
+To calculate the amount of ice needed, we can use the formula:(Q = m \c \∆T,
 where:
 (Q) is the heat absorbed by the ice (in Joules),
 (m) is the mass of the ice (in kilograms),(c) is the specific heat capacity of ice (about 2.09 J/g°C),
