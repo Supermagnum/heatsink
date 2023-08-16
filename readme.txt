@@ -72,7 +72,7 @@ m = Mass of the substance (in kilograms)
 c = Specific heat capacity of water (approximately 4.18 J/g°C)
 ΔT = Change in temperature (final temperature - initial temperature)
 
-We know that the initial temperature of water is 40°C and it's being cooled to 0°C (assuming ice temperature). Solving for the mass (m):
+We know that the initial temperature of water is 40°C and it's being cooled to 0°C  in this case (assuming ice temperature). Solving for the mass (m):
 
 m = Q / (c * ΔT)
 m = 277320 J / (4.18 J/g°C * 40°C)
@@ -84,7 +84,7 @@ m ≈ 1.65663 kg
 
 So, approximately 1.66 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water/glycol mix at 40 degrees Celsius over a period of 150 seconds. 
 
-Now, when the coolant has reached 18 degrees Celsius say we want to keep it there.
+Now, when the coolant has reached 18 degrees Celsius say we want to keep it at that temperature.
 
 How one can calculate the amounts of ice needed per hour to keep the coolant liquid at 18 degrees Celsius if the ambient air temperature is 40 degrees Celsius:
 First, we need to calculate the initial temperature difference between the water and the ambient air:
