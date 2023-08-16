@@ -86,24 +86,51 @@ So, approximately 1.66 kilograms of ice (equivalent to the mass of water being c
 
 Now, when the coolant has reached 18 degrees Celsius say we want to keep it there for 4 hours as a example.
 
-To calculate the amount of ice needed, we can use the formula:(Q = m \c \∆T,
-where:
-(Q) is the heat absorbed by the ice (in Joules),
-(m) is the mass of the ice (in kilograms),(c) is the specific heat capacity of ice (about 2.09 J/g°C),
-∆T is the temperature change (in °C).
+To calculate the amount of ice needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius, we can use the heat transfer equation:
 
-Given that the temperature change is from 0°C to -18°C, we have ∆T = -18°C - 0°C = -18°C).
+Q = m * c * ΔT
 
-The heat (Q) absorbed by the ice is also given by:
-(Q = P \c t),where:(P) is the power (100W),(t) is the time (4 hours, which is 14,400 seconds).
+Where:
+- Q is the heat transfer (in Joules)
+- m is the mass of the water (in kilograms)
+- c is the specific heat capacity of water (approximately 4186 J/kg°C)
+- ΔT is the temperature difference (in degrees Celsius)
 
-So, around 4 kilos of ice is needed.
+How one can calculate the amounts of ice needed per hour to keep the coolant liquid at 18 degrees Celsius if the ambient air temperature is 40 degrees Celsius:
+First, we need to calculate the initial temperature difference between the water and the ambient air:
 
-Keep in mind that this calculation assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
+ΔT_initial = 40°C - 18°C = 22°C
+
+Next, we calculate the heat transfer required to bring the water to its final temperature:
+
+Q = m * c * ΔT_initial
+
+Since we're interested in how much ice is needed to absorb this heat, we can also equate it to the heat absorbed by melting ice:
+
+Q = m_ice * L_f
+
+Where:
+- m_ice is the mass of ice (in kilograms)
+- L_f is the heat of fusion of ice (334,000 J/kg)
+
+Combining the two equations:
+
+m_ice * L_f = m * c * ΔT_initial
+
+Solving for m_ice:
+
+m_ice = (m * c * ΔT_initial) / L_f
+
+Given that the density of water is approximately 1000 kg/m³, the mass of 3 liters of water is 3 kg.
+
+m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0.189 kg
+
+So, approximately 0.189 kilograms (189 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
+
+Keep in mind that these calculations assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
 They also assumes that I haven't made any bloopers.
 
-
-How does one keep the temperature of the coolant at 18 degrees Celsius?
+How does one keep the temperature of the coolant at 18 degrees Celsius, 0 degrees coolant is uncomfortable!
 
 One can use a automotive NTC temperature sensor like this, and a arduino to control the temperature:
 https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf
