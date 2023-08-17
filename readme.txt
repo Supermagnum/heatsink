@@ -12,7 +12,7 @@ I think that NASA just used ice in those boxes, and you need the capacity to at 
 It needs a aluminium heat exhanger, that is connected to a cooling loop sewn into a spandex suit. The cooling loop is made of 
 6 hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water/glycol mix. 
 
-Thermal calculation:
+Thermal calculation examples:
 One cools 3 liters of water/glycol from 40 degrees to 18 degrees in 150 seconds.
 
 How much heat must be removed:
