@@ -118,6 +118,7 @@ It has two switches, to adjust the coolant temperature between 15 degrees and 25
 One for up, one for down. 
 I also has another switch to start the pump.
 It has 2 relay outputs, one activates if the coolant temperature goes over 30 degrees Celsius for a set time. It can be used to activate a buzzer to signal out of ice.
+It also puts out the wanted temperature, sensed temperature and current pump pwm to a 4 line lcd screen.
 https://github.com/Supermagnum/heatsink/tree/main/firmware
 
 
