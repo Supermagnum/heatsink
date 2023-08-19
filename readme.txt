@@ -28,8 +28,6 @@ Q = 3 kg x 4180 J/kg°C x 22 °C Q = 277,320 J
 
 This means that the heat exchanger removes 277,320 joules of heat from the cooling loop in 150 seconds.
 
-
-
 Ice as a cooling medium for the coolant loop:
 
 To calculate the amount of ice needed to remove 1848.8 watts of energy from 3 liters of water at 40 degrees Celsius over a period of 150 seconds, we can use the formula:
@@ -115,7 +113,7 @@ One then can monitor the temperature of the suits output and use PWM control to 
 
 Why water/glycol mix? So that the liquid in the coolant loop does not freeze or turn to slush in the heat exchanger.
 
-Preliminary firmware:
+Preliminary firmware for Arduino and the mentioned temperature sensor:
 It has two switches, to adjust the coolant temperature between 15 degrees and 25 degrees Celsius in 5 degree steps.
 One for up, one for down. 
 I also has another switch to start the pump.
