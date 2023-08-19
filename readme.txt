@@ -28,25 +28,9 @@ Q = 3 kg x 4180 J/kg°C x 22 °C Q = 277,320 J
 
 This means that the heat exchanger removes 277,320 joules of heat from the cooling loop in 150 seconds.
 
-Peltier cooling;
-P is required to remove this amount of heat using Peltier elements. We can use another formula: P = Q / t where P is the power in watts, Q is the heat transfer in joules, and t is the time in seconds.
-P = Q / t P = 277,320 / 150 s ≈ 1848.8 watts
-
-However, this is not the actual effect the Peltier elements must have as a minimum, because they are not 100% efficient. In fact, they use more power than they transmit, because some of the input power is converted into waste heat on both sides of the element.
-
-The COP can be calculated using a complex formula involving many parameters, or it can be obtained from a data sheet from the manufacturer of the Peltier element. For simplicity, let's assume we have a typical Peltier element with a COP of about 0.53.
-So, dividing watts by COP, we get: P / COP = 1848.8 / 0.5 ≈ 1848.8 W
-
-Since there are four Peltier elements in the heat exchanger, one can divide this power by four to get watts per element:
-P / COP / 4 = 1848.8 / 4 ≈ 462.2
-
-So each Peltier element needs about 462.2 watts to cool down the cooling loop from 40°C to 18°C in 150 seconds.
-
-As the cooling loop is heated with 100W, you must have peltier elements with a minimum power of a total of 1848 W.
-That is going to need some serious amount of power, the battery will be expensive,heavy, and  the  Peltier elements are not cheap.
 
 
-How if one instead uses ice as a cooling medium for the coolant loop?
+Ice as a cooling medium for the coolant loop:
 
 To calculate the amount of ice needed to remove 1848.8 watts of energy from 3 liters of water at 40 degrees Celsius over a period of 150 seconds, we can use the formula:
 
@@ -130,6 +114,13 @@ One then can monitor the temperature of the suits output and use PWM control to 
 
 
 Why water/glycol mix? So that the liquid in the coolant loop does not freeze or turn to slush in the heat exchanger.
+
+Preliminary firmware:
+It has two switches, to adjust the coolant temperature between 15 degrees and 25 degrees Celsius in 5 degree steps.
+One for up, one for down. 
+I also has another switch to start the pump.
+It has 2 relay outputs, one activates if the coolant temperature goes over 30 degrees Celsius for a set time. It can be used to activate a buzzer to signal out of ice.
+https://github.com/Supermagnum/heatsink/tree/main/firmware
 
 
 
