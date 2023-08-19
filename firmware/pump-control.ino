@@ -10,7 +10,7 @@ const int downSwitchPin = 3;    // Temperature decrease switch pin
 const int relayPin1 = 4;        // First relay pin
 const int relayPin2 = 5;        // Second relay pin
 
-// NTC calibration table
+// NTC calibration table,Bosch Motorsport  Temperature Sensor NTC M12
 const float ntcCalibration[][2] = {
   {-40, 45313},
   {-20, 15462},
