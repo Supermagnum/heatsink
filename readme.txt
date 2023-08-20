@@ -4,7 +4,7 @@ https://github.com/Supermagnum/heatsink/blob/main/WEB10864-2008h.jpg
 Those are a cooling suits, used in the lowest layer on space suits.
 It has hoses for circulation of cooling medium. 
 A single layer of fabric may be used, with the tubing either on the inside directly contacting the wearer's skin, or on the outside separated by the fabric. If two layers of fabric are used, stitched channels can be formed which enclose the tubing between the two fabric layers. Where flame resistance is needed, the garment may be constructed out of materials such as nomex. 
-If anyone has seen the apollo 13 movie, the boxes carried by the astronauts on the way to the space capsule is a heat exhanger that provides cooling until the suits can be hooked up to the capsules internal cooling system.
+If anyone has seen the apollo 13 movie, the boxes carried by  the astronauts on the way to the space capsule is a heat exhanger that provides cooling until the suits can be hooked up to the capsules internal cooling system.
 That box also provides O2.
 
 I think that NASA just used ice in those boxes, and you need the capacity to at least transport 200W because the human body generates about 100W. One could rip out the heat exhanger from a car, the bit who heats air, make the suit out of spandex and sew in loops. Hook that up to a aquarium pump or similar, and the heat exhanger that goes in a bucket of ice cubes and water. The pump will need to be able to flow 20 liters per minute, and must run on 12V and accept PWM control.
@@ -100,10 +100,34 @@ m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0.189 kg
 So, approximately 0.189 kilograms (189 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
 But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is= 1.8 kg
 
-Suggested maximum flow rate for 3 liters of coolant:
-60 liters per minute
-Minimum:
-1 liters per minute.
+Calculateand maximum and minimum flow rate for the coolant pump:
+To calculate the required flow rate of water coolant, we can use the formula for heat transfer:
+
+Q = (m_dot * Cp * ΔT) / t
+
+Where:
+Q = Heat transfer rate (Energy removed from the coolant)
+m_dot = Mass flow rate of the coolant
+Cp = Specific heat capacity of water
+ΔT = Temperature difference (initial - final)
+t = Time
+
+First, let's calculate the temperature difference:
+ΔT = 40°C - 15°C = 25°C
+
+The specific heat capacity of water (Cp) is approximately 4.18 J/(g·°C).
+
+Now, let's calculate the mass flow rate (m_dot) using the energy removed from the coolant (277320 J) and the temperature difference:
+m_dot = (Q * t) / (Cp * ΔT)
+m_dot = (277320 J * 150 s) / (4.18 J/g·°C * 25°C)
+
+Given that the mass of 3 liters of water is approximately 3000 grams (since 1 liter of water weighs about 1000 grams), we can calculate the required flow rate in liters per minute:
+Flow rate = m_dot / density_water
+
+Since the density of water is about 1000 g/L, the flow rate would be:
+Flow rate = m_dot / 1000
+
+Please substitute the values into the calculations to find the required flow rate of the water coolant in liters per minute.
 
 Keep in mind that these calculations assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
 They also assumes that I haven't made any bloopers.
