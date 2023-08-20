@@ -100,7 +100,7 @@ m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0.189 kg
 So, approximately 0.189 kilograms (189 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
 But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is= 1.8 kg
 
-Calculateand maximum and minimum flow rate for the coolant pump:
+Calculate maximum and minimum flow rates for the coolant pump:
 To calculate the required flow rate of water coolant, we can use the formula for heat transfer:
 
 Q = (m_dot * Cp * ΔT) / t
