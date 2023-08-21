@@ -24,9 +24,11 @@ specific heat capacity of water is 4.18 J/g°C, one liter of water is 1000 grams
 And we know that the temperature change of the water is 40 - 18 = 22 °C.
 
 So by entering these values into the formula we get:
-Q = 3 kg x 4180 J/kg°C x 22 °C Q = 277,320 J
+Q = 3 kg x 4180 J/kg°C x 22 °C Q = 275880 J
 
-This means that the heat exchanger removes 277,320 joules of heat from the cooling loop in 150 seconds.
+This means that the heat exchanger removes 275880 joules of heat from the cooling loop in 150 seconds.
+
+To convert joules into watts= Joules/time in seconds.
 
 Ice as a cooling medium for the coolant loop:
 
@@ -58,13 +60,13 @@ We know that the initial temperature of water is 40°C and it's being cooled to 
 
 m = Q / (c * ΔT)
 m = 277320 J / (4.18 J/g°C * 40°C)
-m ≈ 1656.63 g
+m ≈ 1658,6 g
 
 Converting grams to kilograms:
 
-m ≈ 1.65663 kg
+m ≈ 1.658 kg
 
-So, approximately 1.66 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water/glycol mix at 40 degrees Celsius over a period of 150 seconds. 
+So, approximately 1.65 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water/glycol mix at 40 degrees Celsius over a period of 150 seconds. 
 
 Now, when the coolant has reached 18 degrees Celsius say we want to keep it at that temperature.
 
@@ -95,39 +97,11 @@ m_ice = (m * c * ΔT_initial) / L_f
 
 Given that the density of water is approximately 1000 kg/m³, the mass of 3 liters of water is 3 kg.
 
-m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0.189 kg
+m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0,827 kg
 
-So, approximately 0.189 kilograms (189 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
-But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is= 1.8 kg
+So, approximately 0,827 kilograms ( 827 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
+But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is ≈ 2 kg
 
-Calculate maximum and minimum flow rates for the coolant pump:
-To calculate the required flow rate of water coolant, we can use the formula for heat transfer:
-
-Q = (m_dot * Cp * ΔT) / t
-
-Where:
-Q = Heat transfer rate (Energy removed from the coolant)
-m_dot = Mass flow rate of the coolant
-Cp = Specific heat capacity of water
-ΔT = Temperature difference (initial - final)
-t = Time
-
-First, let's calculate the temperature difference:
-ΔT = 40°C - 15°C = 25°C
-
-The specific heat capacity of water (Cp) is approximately 4.18 J/(g·°C).
-
-Now, let's calculate the mass flow rate (m_dot) using the energy removed from the coolant (277320 J) and the temperature difference:
-m_dot = (Q * t) / (Cp * ΔT)
-m_dot = (277320 J * 150 s) / (4.18 J/g·°C * 25°C)
-
-Given that the mass of 3 liters of water is approximately 3000 grams (since 1 liter of water weighs about 1000 grams), we can calculate the required flow rate in liters per minute:
-Flow rate = m_dot / density_water
-
-Since the density of water is about 1000 g/L, the flow rate would be:
-Flow rate = m_dot / 1000
-
-Please substitute the values into the calculations to find the required flow rate of the water coolant in liters per minute.
 
 Keep in mind that these calculations assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
 They also assumes that I haven't made any bloopers.
