@@ -1,128 +1,90 @@
-//preliminary firmware to control a pumps PWM rate based on temperature. 
+#include <LiquidCrystal.h>
 
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+// Pins for temperature adjustment switches
+const int tempUpPin = 2;
+const int tempDownPin = 3;
 
-// Pin definitions
-const int ntcPin = A0;          // NTC analog pin
-const int upSwitchPin = 2;      // Temperature increase switch pin
-const int downSwitchPin = 3;    // Temperature decrease switch pin
-const int relayPin1 = 4;        // First relay pin
-const int relayPin2 = 5;        // Second relay pin
+// Pins for relays
+const int pumpRelayPin = 4;
+const int secondRelayPin = 5;
 
-// NTC calibration table,Bosch Motorsport  Temperature Sensor NTC M12
-const float ntcCalibration[][2] = {
-  {-40, 45313},
-  {-20, 15462},
-  {-10, 9397},
-  {0, 5896},
-  {10, 3792},
-  {20, 2500},
-  {30, 1707},
-  {40, 1175},
-  {50, 834}
-};
+// Pin for NTC
+const int ntcPin = A0;
 
-const int numCalibrationPoints = sizeof(ntcCalibration) / sizeof(ntcCalibration[0]);
+// Calibration table values
+const int calibrationTemps[] = {-40, -20, -10, 0, 10, 20, 30, 40, 50};
+const int calibrationValues[] = {45313, 15462, 9397, 5896, 3792, 2500, 1707, 1175, 834};
+const int calibrationSize = sizeof(calibrationTemps) / sizeof(calibrationTemps[0]);
 
-// Constants
-const int minPWM = 20;          // Minimum PWM value
-const int targetTemp = 20;      // Initial target temperature
+// PWM minimum and maximum values
+const int pwmMin = 51; // 20% of 255
+const int pwmMax = 255;
+
+// NTC parameters
+const int seriesResistor = 50000; // 50K resistor
+const int betaValue = 3950;       // Beta value of NTC
+const int ntcNominal = 5896;      // NTC resistance at 0 Celsius
+
+// LCD setup
+LiquidCrystal lcd(8, 9, 10, 11, 12, 13);
 
 // Variables
-int currentTemp = 0;
-int targetTempIndex = 4;        // Index of initial target temperature (20 degrees)
-int currentPWM = 0;
-unsigned long previousMillis = 0;
-const long interval = 15000;    // Sampling interval in milliseconds
-bool relayActivated = false;
-
-LiquidCrystal_I2C lcd(0x3F, 16, 2);
+int setTemp = 20;       // Initial set temperature
+int currentTemp = 0;    // Current temperature read from NTC
+int currentPWM = 0;     // Current PWM value
+boolean relayActive = false;
 
 void setup() {
-  pinMode(ntcPin, INPUT);
-  pinMode(upSwitchPin, INPUT_PULLUP);
-  pinMode(downSwitchPin, INPUT_PULLUP);
-  pinMode(relayPin1, OUTPUT);
-  pinMode(relayPin2, OUTPUT);
-  
-  lcd.init();
-  lcd.backlight();
-  lcd.setCursor(0, 0);
+  pinMode(tempUpPin, INPUT_PULLUP);
+  pinMode(tempDownPin, INPUT_PULLUP);
+  pinMode(pumpRelayPin, OUTPUT);
+  pinMode(secondRelayPin, OUTPUT);
+
+  lcd.begin(16, 2);
   lcd.print("Set: ");
   lcd.setCursor(0, 1);
-  lcd.print("Read: ");
+  lcd.print("Temp: ");
 }
 
 void loop() {
-  // Read NTC temperature and calculate resistance
-  int rawADC = analogRead(ntcPin);
-  float voltage = (rawADC / 1023.0) * 5.0;
-  float resistance = (5.0 * 50000.0) / voltage - 50000.0;
-  
-  // Calculate temperature using interpolation
-  float temp = interpolateTemperature(resistance);
-  
-  // Update LCD display
-  lcd.setCursor(5, 1);
-  lcd.print(temp);
-  
-  // Check if relay activation conditions are met
-  if (temp > 30 && relayActivated) {
-    unsigned long currentMillis = millis();
-    if (currentMillis - previousMillis >= 120000) {
-      digitalWrite(relayPin1, HIGH);
-      digitalWrite(relayPin2, HIGH);
-    }
+  // Read temperature adjustment switches
+  if (digitalRead(tempUpPin) == LOW && setTemp < 25) {
+    setTemp += 5;
+  }
+  if (digitalRead(tempDownPin) == LOW && setTemp > 15) {
+    setTemp -= 5;
+  }
+
+  // Read temperature from NTC
+  int ntcReading = analogRead(ntcPin);
+  double ntcResistance = seriesResistor * (1023.0 / ntcReading - 1.0);
+  double steinhart = ntcResistance / ntcNominal;  // (R/Ro)
+  steinhart = log(steinhart);                     // ln(R/Ro)
+  steinhart /= betaValue;                         // 1/B * ln(R/Ro)
+  steinhart += 1.0 / (273.15 + 25.0);             // + (1/To)
+  steinhart = 1.0 / steinhart;                    // Invert
+  currentTemp = int(steinhart - 273.15);          // Convert to Celsius
+
+  // Calculate PWM based on temperature
+  if (currentTemp <= setTemp) {
+    currentPWM = map(currentTemp, setTemp, 15, pwmMin, pwmMax);
   } else {
-    previousMillis = millis();
+    currentPWM = map(currentTemp, setTemp, 25, pwmMin, pwmMax);
   }
-  
-  // Check switch inputs
-  if (digitalRead(upSwitchPin) == LOW) {
-    if (targetTempIndex < numCalibrationPoints - 1) {
-      targetTempIndex++;
-      updateTargetTemperature();
-    }
-    delay(250);
-  }
-  
-  if (digitalRead(downSwitchPin) == LOW) {
-    if (targetTempIndex > 0) {
-      targetTempIndex--;
-      updateTargetTemperature();
-    }
-    delay(250);
-  }
-  
-  // Calculate PWM value based on temperature error
-  int tempError = targetTemp - temp;
-  currentPWM = map(tempError, -10, 10, minPWM, 255);
-  analogWrite(relayPin1, currentPWM);
-  
-  // Update LCD display
+  analogWrite(pumpRelayPin, currentPWM);
+
+  // Display values on LCD
   lcd.setCursor(5, 0);
-  lcd.print(targetTemp);
+  lcd.print(setTemp);
+  lcd.setCursor(6, 1);
+  lcd.print(currentTemp);
   lcd.setCursor(12, 1);
   lcd.print(currentPWM);
-  
-  delay(interval);
-}
 
-float interpolateTemperature(float resistance) {
-  for (int i = 0; i < numCalibrationPoints - 1; i++) {
-    if (resistance >= ntcCalibration[i][1] && resistance <= ntcCalibration[i + 1][1]) {
-      float tempRange = ntcCalibration[i + 1][0] - ntcCalibration[i][0];
-      float resistanceRange = ntcCalibration[i + 1][1] - ntcCalibration[i][1];
-      float resistanceDiff = resistance - ntcCalibration[i][1];
-      return ntcCalibration[i][0] + (tempRange / resistanceRange) * resistanceDiff;
-    }
+  // Check temperature threshold for relay activation
+  if (currentTemp > 30 && relayActive == false) {
+    delay(120000); // Wait for 120 seconds
+    digitalWrite(secondRelayPin, HIGH);
+    relayActive = true;
   }
-  return -40.0; // Default value if calibration is out of range
-}
-
-void updateTargetTemperature() {
-  targetTemp = ntcCalibration[targetTempIndex][0];
-  lcd.setCursor(5, 0);
-  lcd.print(targetTemp);
 }
