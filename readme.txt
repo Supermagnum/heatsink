@@ -125,6 +125,38 @@ It also puts out the wanted temperature, sensed temperature and current pump pwm
 https://github.com/Supermagnum/heatsink/tree/main/firmware
 
 
+### Required Hardware:
+1. Arduino board (e.g., Arduino Uno)
+2. NTC thermistor, Bosch M12.
+3. Resistor (50k ohms)
+4. 4-line LCD (compatible with LiquidCrystal library)
+5. Three switches (for temperature up, temperature down, and relay control)
+6. Pump controlled via PWM
+7. Two relays,12V
+8. Breadboard and connecting wires
+
+### Connections:
+- NTC thermistor and 50k resistor form a voltage divider.
+- LCD connected to appropriate digital pins.
+- Switches connected to digital pins with pull-down resistors.
+- PWM pin connected to pump control input.
+- Digital pins connected to relay control inputs.
+
+### Notes:
+1. **Debouncing**: The debounce logic ensures that button presses are not registered multiple times due to mechanical bounce.
+2. **Temperature Calculation**: The resistance of the NTC is converted to a temperature value using a linear interpolation method between calibration points.
+3. **PWM Control**: The PWM value is adjusted based on the difference between the target temperature and the read temperature, with a minimum PWM of 10%.
+4. **LCD Display**: The LCD shows the target temperature, the read temperature, the current PWM value, and the state of the relay.
+
+
+### Adjustments:
+- Ensure that the LCD pin connections in the code match your actual connections.
+- Modify pin numbers if you use different pins for buttons, relays, or the NTC sensor.
+- If the NTC thermistor has different calibration values, adjust the `tempValues` and `resistanceValues` arrays accordingly.
+
+
+
+
 
 
 
