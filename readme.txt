@@ -105,6 +105,7 @@ But, one needs to include that a human body generates maximum 100W of heat, so t
 
 Keep in mind that these calculations assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
 They also assumes that I haven't made any bloopers.
+I suggest using Cold Gel Packs, Campingaz or similar as they supposedly lasts longer that ice cubes.
 
 How does one keep the temperature of the coolant at 18 degrees Celsius, 0 degrees coolant is uncomfortable!
 There's also a risk of hyperthermia!
@@ -130,7 +131,7 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 2. NTC thermistor, Bosch M12.
 3. Resistor (50k ohms)
 4. 4-line LCD (compatible with LiquidCrystal library)
-5. Three switches (for temperature up, temperature down, and relay control)
+5. Three guarded stsp switches (for temperature up, temperature down, and relay control)
 6. Pump controlled via PWM
 7. Two relays,12V
 8. Breadboard and connecting wires
