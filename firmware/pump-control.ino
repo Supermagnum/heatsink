@@ -1,90 +1,122 @@
 #include <LiquidCrystal.h>
 
-// Pins for temperature adjustment switches
-const int tempUpPin = 2;
-const int tempDownPin = 3;
+// Constants
+const int ntcPin = A0;             // Analog pin for NTC thermistor
+const int pwmPin = 9;              // PWM pin for pump control
+const int relay1Pin = 7;           // Digital pin for relay 1
+const int relay2Pin = 8;           // Digital pin for relay 2
+const int tempUpButton = 2;        // Button to increase target temperature
+const int tempDownButton = 3;      // Button to decrease target temperature
+const int relayControlButton = 4;  // Button to control relays
+const int resistorValue = 50000;   // 50k ohm resistor
+const int debounceDelay = 50;      // Debounce delay in ms
+const float tau = 15.0;            // Response time constant (in seconds)
+const float dt = 0.5;              // Loop time interval (in seconds)
+const float alpha = dt / tau;      // Exponential smoothing factor
 
-// Pins for relays
-const int pumpRelayPin = 4;
-const int secondRelayPin = 5;
-
-// Pin for NTC
-const int ntcPin = A0;
-
-// Calibration table values
-const int calibrationTemps[] = {-40, -20, -10, 0, 10, 20, 30, 40, 50};
-const int calibrationValues[] = {45313, 15462, 9397, 5896, 3792, 2500, 1707, 1175, 834};
-const int calibrationSize = sizeof(calibrationTemps) / sizeof(calibrationTemps[0]);
-
-// PWM minimum and maximum values
-const int pwmMin = 51; // 20% of 255
-const int pwmMax = 255;
-
-// NTC parameters
-const int seriesResistor = 50000; // 50K resistor
-const int betaValue = 3950;       // Beta value of NTC
-const int ntcNominal = 5896;      // NTC resistance at 0 Celsius
-
-// LCD setup
-LiquidCrystal lcd(8, 9, 10, 11, 12, 13);
+// Calibration table
+const int tempValues[] = {-40, -20, -10, 0, 10, 20, 30, 40, 50};
+const long resistanceValues[] = {45313, 15462, 9397, 5896, 3792, 2500, 1707, 1175, 834};
 
 // Variables
-int setTemp = 20;       // Initial set temperature
-int currentTemp = 0;    // Current temperature read from NTC
-int currentPWM = 0;     // Current PWM value
-boolean relayActive = false;
+int targetTemp = 15;               // Target temperature (initially 15°C)
+float readTemp = 0;                // Current temperature
+int pwmValue = 0;                  // PWM value (0-255)
+bool relayActive = false;          // Relay control state
+unsigned long lastDebounceTime = 0;// Debounce timer
+
+// LCD setup
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 void setup() {
-  pinMode(tempUpPin, INPUT_PULLUP);
-  pinMode(tempDownPin, INPUT_PULLUP);
-  pinMode(pumpRelayPin, OUTPUT);
-  pinMode(secondRelayPin, OUTPUT);
+  pinMode(ntcPin, INPUT);
+  pinMode(pwmPin, OUTPUT);
+  pinMode(relay1Pin, OUTPUT);
+  pinMode(relay2Pin, OUTPUT);
+  pinMode(tempUpButton, INPUT_PULLUP);
+  pinMode(tempDownButton, INPUT_PULLUP);
+  pinMode(relayControlButton, INPUT_PULLUP);
 
-  lcd.begin(16, 2);
-  lcd.print("Set: ");
-  lcd.setCursor(0, 1);
-  lcd.print("Temp: ");
+  lcd.begin(20, 4);
+  lcd.clear();
+  
+  digitalWrite(relay1Pin, LOW);
+  digitalWrite(relay2Pin, LOW);
+
+  Serial.begin(9600);
 }
 
 void loop() {
-  // Read temperature adjustment switches
-  if (digitalRead(tempUpPin) == LOW && setTemp < 25) {
-    setTemp += 5;
+  float currentTemp = getTemperature();
+  readTemp += alpha * (currentTemp - readTemp);
+
+  if (digitalRead(tempUpButton) == LOW && (millis() - lastDebounceTime) > debounceDelay) {
+    targetTemp = min(targetTemp + 5, 25);
+    lastDebounceTime = millis();
   }
-  if (digitalRead(tempDownPin) == LOW && setTemp > 15) {
-    setTemp -= 5;
+  
+  if (digitalRead(tempDownButton) == LOW && (millis() - lastDebounceTime) > debounceDelay) {
+    targetTemp = max(targetTemp - 5, 15);
+    lastDebounceTime = millis();
+  }
+  
+  if (digitalRead(relayControlButton) == LOW && (millis() - lastDebounceTime) > debounceDelay) {
+    relayActive = !relayActive;
+    digitalWrite(relay2Pin, relayActive ? HIGH : LOW);
+    lastDebounceTime = millis();
   }
 
-  // Read temperature from NTC
-  int ntcReading = analogRead(ntcPin);
-  double ntcResistance = seriesResistor * (1023.0 / ntcReading - 1.0);
-  double steinhart = ntcResistance / ntcNominal;  // (R/Ro)
-  steinhart = log(steinhart);                     // ln(R/Ro)
-  steinhart /= betaValue;                         // 1/B * ln(R/Ro)
-  steinhart += 1.0 / (273.15 + 25.0);             // + (1/To)
-  steinhart = 1.0 / steinhart;                    // Invert
-  currentTemp = int(steinhart - 273.15);          // Convert to Celsius
+  updatePWM();
+  updateLCD();
 
-  // Calculate PWM based on temperature
-  if (currentTemp <= setTemp) {
-    currentPWM = map(currentTemp, setTemp, 15, pwmMin, pwmMax);
+  if (relayActive && readTemp > 30) {
+    delay(120000); // 120 seconds delay
+    digitalWrite(relay1Pin, HIGH);
   } else {
-    currentPWM = map(currentTemp, setTemp, 25, pwmMin, pwmMax);
+    digitalWrite(relay1Pin, LOW);
   }
-  analogWrite(pumpRelayPin, currentPWM);
 
-  // Display values on LCD
-  lcd.setCursor(5, 0);
-  lcd.print(setTemp);
-  lcd.setCursor(6, 1);
-  lcd.print(currentTemp);
-  lcd.setCursor(12, 1);
-  lcd.print(currentPWM);
+  delay(dt * 1000); // Delay for dt seconds
+}
 
-  // Check temperature threshold for relay activation
-  if (currentTemp > 30 && relayActive == false) {
-    delay(120000); // Wait for 120 seconds
-    digitalWrite(secondRelayPin, HIGH);
-    relayActive = true;
+float getTemperature() {
+  int analogValue = analogRead(ntcPin);
+  float voltage = analogValue * (5.0 / 1023.0);
+  float resistance = (5.0 / voltage - 1) * resistorValue;
+
+  float temp = 0;
+  for (int i = 0; i < 8; i++) {
+    if (resistance <= resistanceValues[i] && resistance >= resistanceValues[i + 1]) {
+      temp = tempValues[i] + (resistance - resistanceValues[i]) * (tempValues[i + 1] - tempValues[i]) / (resistanceValues[i + 1] - resistanceValues[i]);
+      break;
+    }
   }
+  
+  return temp;
+}
+
+void updatePWM() {
+  if (readTemp < targetTemp) {
+    pwmValue = map(readTemp, -40, targetTemp, 26, 255); // Scale PWM value (minimum 10% = 26 out of 255)
+  } else {
+    pwmValue = 0;
+  }
+  
+  analogWrite(pwmPin, pwmValue);
+}
+
+void updateLCD() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Target Temp: ");
+  lcd.print(targetTemp);
+  lcd.setCursor(0, 1);
+  lcd.print("Read Temp: ");
+  lcd.print(readTemp);
+  lcd.setCursor(0, 2);
+  lcd.print("PWM Value: ");
+  lcd.print(pwmValue);
+  lcd.setCursor(0, 3);
+  lcd.print("Relay Active: ");
+  lcd.print(relayActive ? "Yes" : "No");
 }
