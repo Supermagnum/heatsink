@@ -68,6 +68,8 @@ m ≈ 1.658 kg
 
 So, approximately 1.65 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water/glycol mix at 40 degrees Celsius over a period of 150 seconds. 
 
+It will take approximately 42.86 seconds to remove 275,880 joules of heat with a flow rate of 5 liters per minute.
+
 Now, when the coolant has reached 18 degrees Celsius say we want to keep it at that temperature.
 
 How one can calculate the amounts of ice needed per hour to keep the coolant liquid at 18 degrees Celsius if the ambient air temperature is 40 degrees Celsius:
@@ -101,7 +103,7 @@ m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0,827 kg
 
 So, approximately 0,827 kilograms ( 827 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
 But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is ≈ 2 kg
-
+The pumps flow rate for that is around 2.5 liters per minute.
 
 Keep in mind that these calculations assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
 They also assumes that I haven't made any bloopers.
@@ -134,7 +136,8 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 5. Three guarded stsp switches (for temperature up, temperature down, and relay control)
 6. Pump controlled via PWM
 7. Two relays,12V
-8. Breadboard and connecting wires
+8. Breadboard and connecting wire
+9.3 10K resistors.
 
 ### Connections:
 - NTC thermistor and 50k resistor form a voltage divider.
