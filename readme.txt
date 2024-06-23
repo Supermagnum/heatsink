@@ -105,9 +105,14 @@ So, approximately 0,827 kilograms ( 827 grams) of ice per hour would be needed t
 But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is ≈ 2 kg
 The pumps flow rate for that is around 2.5 liters per minute.
 
+Liquid to ice heat exhanger:
+To extract 275,880 J of heat from water ice over 150 seconds using a 10 mm OD and 0.8 mm wall thickness copper tube with a temperature difference of 40 degrees Celsius and a convective heat transfer coefficient of 200 W/m²·K, the required length of the copper tube is approximately 7.32 meters. That is a inner surface of 1,848 square metres, and 2,198 square metres.
+
 Keep in mind that these calculations assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
-They also assumes that I haven't made any bloopers.
-I suggest using Cold Gel Packs, Campingaz or similar as they supposedly lasts longer that ice cubes.
+
+They also assumes that I haven't made any mathematical bloopers.
+
+I suggest using Cold Gel Packs, Campingaz or similar brand as they supposedly lasts longer that ice cubes.
 
 How does one keep the temperature of the coolant at 18 degrees Celsius, 0 degrees coolant is uncomfortable!
 There's also a risk of hyperthermia!
@@ -115,7 +120,6 @@ There's also a risk of hyperthermia!
 One can use a automotive NTC temperature sensor like this, and a arduino to control the temperature:
 https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf
 One then can monitor the temperature of the suits output and use PWM control to  control the speed of a pump.
-
 
 Why water/glycol mix? So that the liquid in the coolant loop does not freeze or turn to slush in the heat exchanger.
 
@@ -138,6 +142,7 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 7. Two relays,12V
 8. Breadboard and connecting wire
 9.3 10K resistors.
+10. hose clamps.
 
 ### Connections:
 - NTC thermistor and 50k resistor form a voltage divider.
