@@ -103,7 +103,7 @@ m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0,827 kg
 
 So, approximately 0,827 kilograms ( 827 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
 But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is ≈ 2 kg
-The pumps flow rate for that is around 2.5 liters per minute.
+The flow rate for that is around 2.5 liters per minute.
 
 Liquid to ice heat exhanger:
 To extract 275,880 J of heat from water ice over 150 seconds using a 10 mm OD and 0.8 mm wall thickness copper tube with a temperature difference of 40 degrees Celsius and a convective heat transfer coefficient of 200 W/m²·K, the required length of the copper tube is approximately 7.32 meters. That is a inner surface of 1,848 square metres, and 2,198 square metres.
