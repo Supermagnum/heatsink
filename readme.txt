@@ -114,6 +114,12 @@ They also assumes that I haven't made any mathematical bloopers.
 
 I suggest using Cold Gel Packs, Campingaz or similar brand as they supposedly lasts longer that ice cubes.
 
+You can make something similar yourself:
+https://m.youtube.com/watch?v=Nqxjfp4Gi0k
+The heat capacity of the salts and water mixture is approximately 5451.5 J/°C.
+The total weight of the mixture is 1695 grams.
+The heat capacity of 1695 grams of water ice is approximately 3543.55 J/°C.
+
 How does one keep the temperature of the coolant at 18 degrees Celsius, 0 degrees coolant is uncomfortable!
 There's also a risk of hyperthermia!
 
