@@ -121,11 +121,17 @@ In latent heat that is around
 3.39J/g°C.
 The total weight of the mixture is 1695 grams. Be aware that it might expand slightly when frozen.
 The heat capacity of 1695 grams of water ice is approximately 3543.55 J/°C.
+
+
 Also,look at:
 https://www.thermalcustompackaging.com/pcm/
 
 The heat capacity of the 2 kg mixture is approximately 6432.92 J/°C.
 The heat capacity of 2 kg of water ice is 4180 J/°C.
+2 kilos of the mixture will last about 3 hours.
+Much better than water ice.
+
+
 
 How does one keep the temperature of the coolant at 18 degrees Celsius, 0 degrees coolant is uncomfortable!
 There's also a risk of hyperthermia!
