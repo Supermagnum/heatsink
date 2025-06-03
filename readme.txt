@@ -163,7 +163,7 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 8. Breadboard and connecting wire
 9.3 10K resistors.
 10. hose clamps.
-11. Assorted size adapters and tube barbs.
+11. Assorted size adapters and tube barbs in metal.
 12: optional small valves to control "zones".
 
 ### Connections:
