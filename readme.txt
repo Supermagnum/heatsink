@@ -1,4 +1,4 @@
-A cooling suit idea:
+A DIY cooling suit idea:
 https://github.com/Supermagnum/heatsink/blob/main/Orlan_cooling_suit.JPG?raw=true
 https://github.com/Supermagnum/heatsink/blob/main/WEB10864-2008h.jpg
 Those are a cooling suits, used in the lowest layer on space suits.
