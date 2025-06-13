@@ -1,7 +1,7 @@
 A DIY cooling suit idea:
-![Cooling Suit 1](https://github.com/Supermagnum/heatsink/blob/main/Orlan_cooling_suit.JPG?raw=true)
+![Cooling Suit 1](https://github.com/Supermagnum/heatsink/blob/main/Orlan_cooling_suit.JPG)
 
-![Cooling Suit 2](https://github.com/Supermagnum/heatsink/blob/main/WEB10864-2008h.jpg?raw=true)
+![Cooling Suit 2](https://github.com/Supermagnum/heatsink/blob/main/WEB10864-2008h.jpg)
 
 Those are cooling suits, used in the lowest layer on space suits.
 It has hoses for circulation of cooling medium. 
