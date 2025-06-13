@@ -161,7 +161,7 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 3. Resistor (50k ohms)
 4. 4-line LCD (compatible with LiquidCrystal library)
 5. Three guarded stsp switches (for temperature up, temperature down, and relay control)
-6. Pump controlled via PWM
+6. Pump controlled via PWM,for cpu/gpu rated minimum 300 liters per hour.
 7. Two relays,12V
 8. Breadboard and connecting wire
 9.3 10K resistors.
