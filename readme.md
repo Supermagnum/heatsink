@@ -5,8 +5,6 @@ A DIY cooling suit idea:
 ![Cooling Suit 2](https://github.com/Supermagnum/heatsink/blob/main/WEB10864-2008h.jpg?raw=true)
 
 Those are cooling suits, used in the lowest layer on space suits.
-
-Those are cooling suits, used in the lowest layer on space suits.
 It has hoses for circulation of cooling medium. 
 A single layer of fabric may be used, with the tubing either on the inside directly contacting the wearer's skin, or on the outside separated by the fabric. If two layers of fabric are used, stitched channels can be formed which enclose the tubing between the two fabric layers. Where flame resistance is needed, the garment may be constructed out of materials such as nomex. 
 If anyone has seen the apollo 13 movie, the boxes carried by  the astronauts on the way to the space capsule is a heat exhanger that provides cooling until the suits can be hooked up to the capsules internal cooling system.
