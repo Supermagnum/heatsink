@@ -154,6 +154,14 @@ It has 2 relay outputs, one activates if the coolant temperature goes over 30 de
 It also puts out the wanted temperature, sensed temperature and current pump pwm to a 4 line lcd screen.
 https://github.com/Supermagnum/heatsink/tree/main/firmware
 
+Pump:
+I suggest a gear or diaphragm pump that can deliver around 12 liters per minute, that is 3 gallons per minute.
+Capable of sucking 1.5~2 meters.
+A peristaltic pump is also possible if you can find one cheap.
+It needs to run on 12V, it must also accept pwm.
+1/2 inch outlet and inlet.
+Not all of them handles continuous usage.
+Centrifugal pumps needs to be primed before usage,and can't be controlled as precisely as those pumps mentioned.
 
 ### Required Hardware:
 1. Arduino board (e.g., Arduino Uno)
@@ -161,7 +169,7 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 3. Resistor (50k ohms)
 4. 4-line LCD (compatible with LiquidCrystal library)
 5. Three guarded stsp switches (for temperature up, temperature down, and relay control)
-6. Pump controlled via PWM,for cpu/gpu rated minimum 300 liters per hour. G1/4 thread inlet/outlet.
+6. Pump controlled via PWM, transistor able to handle 12A.
 7. Two relays,12V
 8. Breadboard and connecting wire
 9.3 10K resistors.
