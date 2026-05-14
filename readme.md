@@ -128,7 +128,7 @@ The heat capacity of 1695 grams of water ice is approximately 3543.55 J/°C.
 
 
 Also,look at:
-https://www.thermalcustompackaging.com/pcm/
+https://www.cryopak.com/solutions/refrigerants/phase-change-materials/phase-5/
 
 The heat capacity of the 2 kg mixture is approximately 6432.92 J/°C.
 The heat capacity of 2 kg of water ice is 4180 J/°C.
