@@ -1,4 +1,4 @@
-A DIY cooling suit idea:
+# DIY Liquid Cooling Suit
 
 ![Cooling Suit 1](https://github.com/Supermagnum/heatsink/blob/main/Orlan_cooling_suit.JPG?raw=true)
 
@@ -7,198 +7,294 @@ A DIY cooling suit idea:
 Those are cooling suits, used in the lowest layer on space suits.
 It has hoses for circulation of cooling medium. 
 A single layer of fabric may be used, with the tubing either on the inside directly contacting the wearer's skin, or on the outside separated by the fabric. If two layers of fabric are used, stitched channels can be formed which enclose the tubing between the two fabric layers. Where flame resistance is needed, the garment may be constructed out of materials such as nomex. 
-If anyone has seen the apollo 13 movie, the boxes carried by  the astronauts on the way to the space capsule is a heat exhanger that provides cooling until the suits can be hooked up to the capsules internal cooling system.
+If anyone has seen the apollo 13 movie, the boxes carried by the astronauts on the way to the space capsule is a heat exchanger that provides cooling until the suits can be hooked up to the capsules internal cooling system.
 That box also provides O2.
 
-I think that NASA just used ice,battery and a pump in those boxes, and you need the capacity to at least transport 200W because the human body generates about 100W. One could rip out the heat exhanger from a car, the bit who heats air, make the suit out of spandex and sew in loops.Mesh cloth or mesh garments are also suitable. 
-A radiator for a CPU liquid cooler should be ideal.Hook that up to a aquarium pump or similar, and the heat exhanger/radiator that goes in a bucket of ice cubes or phase shifting material and water. The pump will need to be able to flow around 4 liters per minute, and must run on 12V and accept PWM control.
+I think that NASA just used ice, battery and a pump in those boxes, and you need the capacity to at least transport 200W because the human body generates about 100W. One could rip out the heat exchanger from a car, the bit who heats air, make the suit out of spandex and sew in loops. Mesh cloth or mesh garments are also suitable. 
+A radiator for a CPU liquid cooler should be ideal. Hook that up to a aquarium pump or similar, and the heat exchanger/radiator that goes in a bucket of ice cubes or phase shifting material and water. The pump will need to be able to flow around 4 liters per minute, and must run on 12V and accept PWM control.
 
 The cooling loop is made of 
-6 pvc hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water/glycol mix. Brass or metal connectors,hose barbs  liquid distribution manifolds with hose clamps should be used.
+6 pvc hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water/glycol mix. Brass or metal connectors, hose barbs, liquid distribution manifolds with hose clamps should be used.
 
-Thermal calculation examples:
-One cools 3 liters of water/glycol from 40 degrees to 18 degrees in 150 seconds.
+---
+
+## Thermal Calculations
+
+### Cooling 3 liters of water/glycol from 40°C to 18°C in 150 seconds
 
 How much heat must be removed:
-Q = mc∆T
-m = 3 kg.
 
-specific heat capacity of water is 4.18 J/g°C, one liter of water is 1000 grams.
+Q = mc∆T  
+m = 3 kg  
+Specific heat capacity of water = 4.18 J/g°C  
+Temperature change: 40 - 18 = 22°C
 
-And we know that the temperature change of the water is 40 - 18 = 22 °C.
+Q = 3 kg × 4180 J/kg°C × 22°C = **275,880 J**
 
-So by entering these values into the formula we get:
-Q = 3 kg x 4180 J/kg°C x 22 °C Q = 275880 J
+This means the heat exchanger removes 275,880 joules of heat from the cooling loop in 150 seconds.
 
-This means that the heat exchanger removes 275880 joules of heat from the cooling loop in 150 seconds.
+To convert joules into watts: Joules / time in seconds = **~1,848W** during initial cooldown.
 
-To convert joules into watts= Joules/time in seconds.
+---
 
-Ice as a cooling medium for the coolant loop:
+### Ice as a cooling medium
 
-To calculate the amount of ice needed to remove 1848.8 watts of energy from 3 liters of water at 40 degrees Celsius over a period of 150 seconds, we can use the formula:
+To remove 1848.8 watts of energy from 3 liters of water at 40°C over 150 seconds:
 
-Q = P * t
+Q = P × t = 1848.8 W × 150 s = **277,320 J**
 
-Where:
-Q = Heat energy (in Joules)
-P = Power (in watts)
-t = Time (in seconds)
+Mass of water being cooled:
 
-Given that P = 1848.8 watts and t = 150 seconds, we can calculate Q:
+m = Q / (c × ΔT) = 277320 / (4.18 × 40) ≈ **1.658 kg**
 
-Q = 1848.8 W * 150 s
-Q = 277320 J
-
-Now, let's use the specific heat capacity formula to determine the mass of water being cooled:
-
-Q = m * c * ΔT
-
-Where:
-Q = Heat energy (in Joules) = 277320 J
-m = Mass of the substance (in kilograms)
-c = Specific heat capacity of water (approximately 4.18 J/g°C)
-ΔT = Change in temperature (final temperature - initial temperature)
-
-We know that the initial temperature of water is 40°C and it's being cooled to 0°C  in this case (assuming ice temperature). Solving for the mass (m):
-
-m = Q / (c * ΔT)
-m = 277320 J / (4.18 J/g°C * 40°C)
-m ≈ 1658,6 g
-
-Converting grams to kilograms:
-
-m ≈ 1.658 kg
-
-So, approximately 1.65 kilograms of ice (equivalent to the mass of water being cooled) would be needed to remove 1848.8 watts of energy from 3 liters of water/glycol mix at 40 degrees Celsius over a period of 150 seconds. 
+So approximately 1.65 kilograms of ice would be needed for the initial cooldown phase.
 
 It will take approximately 42.86 seconds to remove 275,880 joules of heat with a flow rate of 5 liters per minute.
 
-Now, when the coolant has reached 18 degrees Celsius say we want to keep it at that temperature.
+---
 
-How one can calculate the amounts of ice needed per hour to keep the coolant liquid at 18 degrees Celsius if the ambient air temperature is 40 degrees Celsius:
-First, we need to calculate the initial temperature difference between the water and the ambient air:
+### Maintaining 18°C coolant temperature
+
+With ambient air temperature at 40°C:
 
 ΔT_initial = 40°C - 18°C = 22°C
 
-Next, we calculate the heat transfer required to bring the water to its final temperature:
+m_ice = (m × c × ΔT_initial) / L_f  
+m_ice = (3 kg × 4186 J/kg°C × 22°C) / 334,000 J/kg ≈ **0.827 kg per hour**
 
-Q = m * c * ΔT_initial
+Including 100W body heat: approximately **~2 kg of ice per hour** is needed.  
+Flow rate for maintenance: **~2.5 liters per minute**.
 
-Since we're interested in how much ice is needed to absorb this heat, we can also equate it to the heat absorbed by melting ice:
+---
 
-Q = m_ice * L_f
+### Liquid-to-ice heat exchanger
 
-Where:
-- m_ice is the mass of ice (in kilograms)
-- L_f is the heat of fusion of ice (334,000 J/kg)
+To extract 275,880 J of heat from ice over 150 seconds using 10mm OD / 0.8mm wall copper tube with a ΔT of 40°C and convective heat transfer coefficient of 200 W/m²·K:
 
-Combining the two equations:
+Required copper tube length: approximately **7.32 meters**  
+Inner surface: 1.848 m²  
+Outer surface: 2.198 m²
 
-m_ice * L_f = m * c * ΔT_initial
+---
 
-Solving for m_ice:
+## Phase-Change Materials
 
-m_ice = (m * c * ΔT_initial) / L_f
+I suggest using Cold Gel Packs, Campingaz or similar brand as they reportedly last longer than ice cubes.
 
-Given that the density of water is approximately 1000 kg/m³, the mass of 3 liters of water is 3 kg.
-
-m_ice = (3 kg * 4186 J/kg°C * 22°C) / 334000 J/kg ≈ 0,827 kg
-
-So, approximately 0,827 kilograms ( 827 grams) of ice per hour would be needed to keep 3 liters of water at 18 degrees Celsius when the ambient air temperature is 40 degrees Celsius.
-But, one needs to include that a human body generates maximum 100W of heat, so the mass of ice needed per hour is ≈ 2 kg
-The flow rate for that is around 2.5 liters per minute.
-
-Liquid to ice heat exhanger:
-To extract 275,880 J of heat from water ice over 150 seconds using a 10 mm OD and 0.8 mm wall thickness copper tube with a temperature difference of 40 degrees Celsius and a convective heat transfer coefficient of 200 W/m²·K, the required length of the copper tube is approximately 7.32 meters. That is a inner surface of 1,848 square metres, and 2,198 square metres.
-
-Keep in mind that these calculations assumes ideal heat transfer and doesn't consider other factors that might affect the cooling process, loss to the environment, heat exhanger loss and so on..
-
-They also assumes that I haven't made any mathematical bloopers.
-
-I suggest using Cold Gel Packs, Campingaz or similar brand as they supposedly lasts longer that ice cubes.
-
-You can make something similar yourself:
+You can make something similar yourself:  
 https://m.youtube.com/watch?v=Nqxjfp4Gi0k
-The heat capacity of the salts and water mixture is approximately 5451.5 J/°C.
-In latent heat that is around 
-3.39J/g°C.
-The total weight of the mixture is 1695 grams. Be aware that it might expand slightly when frozen.
-The heat capacity of 1695 grams of water ice is approximately 3543.55 J/°C.
 
+- Heat capacity of the salt/water mixture: approximately **5,451.5 J/°C**
+- Latent heat: approximately **3.39 J/g°C**
+- Total weight of mixture: **1,695 grams**
+- Be aware that it might expand slightly when frozen.
+- Heat capacity of 1,695 grams of water ice: approximately **3,543.55 J/°C**
 
-Also,look at:
+Also look at:  
 https://www.cryopak.com/solutions/refrigerants/phase-change-materials/phase-5/
 
-The heat capacity of the 2 kg mixture is approximately 6432.92 J/°C.
-The heat capacity of 2 kg of water ice is 4180 J/°C.
-2 kilos of the mixture will last about 3 hours.
-Much better than water ice.
+- Heat capacity of 2 kg mixture: approximately **6,432.92 J/°C**
+- Heat capacity of 2 kg water ice: **4,180 J/°C**
+- 2 kg of the mixture will last approximately **3 hours** — much better than water ice.
 
+---
 
+## Temperature Control
 
-How does one keep the temperature of the coolant at 18 degrees Celsius, 0 degrees coolant is uncomfortable!
-There's also a risk of hyperthermia!
+To keep coolant at 18°C (0°C coolant is uncomfortable and risks hypothermia):
 
-One can use a automotive NTC temperature sensor like this, and a arduino to control the temperature:
+Use an automotive NTC temperature sensor and an Arduino to control temperature:  
 https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf
-One then can monitor the temperature of the suits output and use PWM control to  control the speed of a pump.
+
+Monitor the suit's output temperature and use PWM control to regulate pump speed.
 
 Why water/glycol mix? So that the liquid in the coolant loop does not freeze or turn to slush in the heat exchanger.
 
-Preliminary firmware for Arduino and the mentioned temperature sensor:
-It has two switches, to adjust the coolant temperature between 15 degrees and 25 degrees Celsius in 5 degree steps.
-One for up, one for down. 
-I also has another switch to start the pump.
-It has 2 relay outputs, one activates if the coolant temperature goes over 30 degrees Celsius for a set time. It can be used to activate a buzzer to signal out of ice.
-It also puts out the wanted temperature, sensed temperature and current pump pwm to a 4 line lcd screen.
+### Preliminary Arduino Firmware
+
+Two switches adjust coolant temperature between 15°C and 25°C in 5°C steps (up/down).  
+A third switch starts the pump.  
+Two relay outputs:
+- Relay 1: activates if coolant temperature exceeds 30°C for a set time (buzzer alert — out of ice warning)
+- Relay 2: spare
+
+LCD shows: target temperature, sensed temperature, current pump PWM.
+
+Firmware repository:  
 https://github.com/Supermagnum/heatsink/tree/main/firmware
 
-Pump:
-I suggest a gear or diaphragm pump that can deliver around 12 liters per minute, that is 3 gallons per minute.
-Capable of sucking 1.5~2 meters.
-A peristaltic pump is also possible if you can find one cheap.
-It needs to run on 12V, it must also accept pwm.
-1/2 inch outlet and inlet.
-Not all of them handles continuous usage.
-Centrifugal pumps needs to be primed before usage,and can't be controlled as precisely as those pumps mentioned.
+---
 
-### Required Hardware:
+## Required Hardware
+
 1. Arduino board (e.g., Arduino Uno)
-2. NTC thermistor, Bosch M12.
+2. NTC thermistor, Bosch M12
 3. Resistor (50k ohms)
 4. 4-line LCD (compatible with LiquidCrystal library)
-5. Three guarded stsp switches (for temperature up, temperature down, and relay control)
-6. Pump controlled via PWM, transistor able to handle 12A.
-7. Two relays,12V
+5. Three guarded STSP switches (temperature up, temperature down, relay control)
+6. Pump controlled via PWM, transistor able to handle 12A
+7. Two relays, 12V
 8. Breadboard and connecting wire
-9.3 10K resistors.
-10. hose clamps.
-11. Assorted size adapters and tube barbs in metal.
-12: optional small valves to control "zones".
+9. 3× 10K resistors
+10. Hose clamps
+11. Assorted size adapters and tube barbs in metal
+12. Optional: small valves to control "zones"
 
-### Connections:
-- NTC thermistor and 50k resistor form a voltage divider.
-- LCD connected to appropriate digital pins.
-- Switches connected to digital pins with pull-down resistors.
-- PWM pin connected to pump control input.
-- Digital pins connected to relay control inputs.
+### Recommended Additional Components
 
-### Notes:
-1. **Debouncing**: The debounce logic ensures that button presses are not registered multiple times due to mechanical bounce.
-2. **Temperature Calculation**: The resistance of the NTC is converted to a temperature value using a linear interpolation method between calibration points.
-3. **PWM Control**: The PWM value is adjusted based on the difference between the target temperature and the read temperature, with a minimum PWM of 10%.
-4. **LCD Display**: The LCD shows the target temperature, the read temperature, the current PWM value, and the state of the relay.
+- **Screw terminal shield** for Arduino (e.g., Seeed Studio Screw Shield) — secures all external wiring without breadboard connections that can vibrate loose
+- **BTS7960 43A Motor Driver Module** for pump PWM control — handles well over 12A, includes screw terminals, no soldering required
+- **Arduino Relay Shield** (4-relay, e.g., Seeed Studio or SainSmart) — covers the 2× 12V relay outputs
+- **LCD Keypad Shield** (e.g., DFRobot) — provides 4-line LCD and built-in buttons, replacing the 3 separate switches
 
+### Arduino Connections
 
-### Adjustments:
-- Ensure that the LCD pin connections in the code match your actual connections.
-- Modify pin numbers if you use different pins for buttons, relays, or the NTC sensor.
-- If the NTC thermistor has different calibration values, adjust the `tempValues` and `resistanceValues` arrays accordingly.
+- NTC thermistor and 50k resistor form a voltage divider connected to analog input
+- LCD connected to appropriate digital pins
+- Switches connected to digital pins with pull-down resistors (10K)
+- PWM pin connected to BTS7960 signal input
+- Digital pins connected to relay control inputs
 
+---
 
+## Wiring Diagram
 
+```mermaid
+graph TD
+    PSU["12V Power Supply / Battery"]
 
+    PSU -->|12V| ARD["Arduino Uno"]
+    PSU -->|12V| BTS["BTS7960 Motor Driver"]
+    PSU -->|12V| REL["Relay Module (2x)"]
+    PSU -->|12V| PUMP["Submersible Pump\n(brushless 12V DC, PWM)"]
 
+    ARD -->|PWM signal| BTS
+    BTS -->|PWM-controlled 12V| PUMP
 
+    ARD -->|Digital pin| REL
+    REL -->|Relay 1: alert| BUZ["Buzzer / Out-of-ice alarm"]
+    REL -->|Relay 2: spare| SPARE["Spare output"]
 
+    NTC["NTC Thermistor\n(Bosch M12)"] -->|Voltage divider with 50K resistor| ARD
+    R50["50K Resistor"] --- NTC
+
+    SW1["Switch: Temp Up"] -->|Digital pin + 10K pulldown| ARD
+    SW2["Switch: Temp Down"] -->|Digital pin + 10K pulldown| ARD
+    SW3["Switch: Pump Start"] -->|Digital pin + 10K pulldown| ARD
+
+    LCD["4-line LCD Display"] -->|Digital pins| ARD
+```
+
+---
+
+## 12V Power Setup
+
+```mermaid
+graph LR
+    BAT["12V Battery\nor PSU"]
+
+    BAT --> FUSE["Fuse\n(15A inline)"]
+    FUSE --> BUS["12V Distribution Bus"]
+
+    BUS -->|12V / ~1A max| ARD["Arduino + shields\n(via 12V barrel jack)"]
+    BUS -->|12V / up to 12A| BTS["BTS7960\n(pump driver)"]
+    BUS -->|12V / ~0.5A| REL["Relay module"]
+
+    GND["Common Ground Bus"] --- ARD
+    GND --- BTS
+    GND --- REL
+    GND --- BAT
+```
+
+**Notes:**
+- All components share a common ground
+- A 15A inline fuse protects the pump circuit
+- The Arduino can be powered directly from 12V via its barrel jack (onboard regulator handles 5V/3.3V internally)
+- The BTS7960 handles the high-current pump load — do not run the pump directly from the Arduino
+- Use appropriately rated wire gauge: 1.5mm² minimum for pump circuit, 0.5mm² for signal wiring
+
+**Battery sizing (portable use):**
+- Pump draw: approximately 3-5A at 12V = 36-60W
+- Arduino + relay + LCD: approximately 0.5A = 6W
+- Total: approximately 4-6A continuous
+- A 20Ah 12V LiFePO4 battery gives approximately 3-4 hours runtime, matching the phase-change block duration
+
+---
+
+## Container Setup
+
+```mermaid
+graph TD
+    LID["Insulated Cooler Lid\n(15-20 litre cooler)"]
+
+    LID -->|Sealed penetrations| HOSE_IN["Coolant hose IN\n(from suit return)"]
+    LID -->|Sealed penetrations| HOSE_OUT["Coolant hose OUT\n(to suit supply)"]
+    LID -->|Sealed penetrations| POWER["12V power cable\n(to pump)"]
+    LID -->|Sealed penetrations| SENSOR["NTC sensor cable"]
+
+    subgraph CONTAINER["Insulated Container (interior)"]
+        RAD["240mm PC Radiator\n(submerged, bottom-mounted)"]
+        PUMP_S["Submersible Pump\n(brushless 12V DC)"]
+        ICE["Ice / Phase-Change Blocks\n(~2kg per hour runtime)"]
+        WATER["Water filling gaps\nfor thermal contact"]
+        RAD --- ICE
+        PUMP_S --- ICE
+        ICE --- WATER
+    end
+
+    HOSE_IN -->|warm coolant from suit| RAD
+    RAD -->|cooled coolant| PUMP_S
+    PUMP_S -->|cooled coolant| HOSE_OUT
+```
+
+**Container notes:**
+- Use a quality foam-insulated cooler (camping/outdoor grade) with a good lid seal
+- The radiator sits at the bottom, fully submerged in ice water — this gives 5-10× better heat transfer than air cooling
+- The submersible pump also sits inside the container, drawing chilled water/glycol
+- All lid penetrations (hoses, cables, sensor) should be sealed with silicone or grommets to prevent warm air ingress
+- Fill gaps around ice/phase-change blocks with water to maximise thermal contact with the radiator
+- The NTC sensor tip routes through the lid to measure coolant temperature at the suit return line
+
+**Radiator sizing:**
+- A 240mm radiator (air-rated ~300W) performs at approximately 1,500-3,000W when submerged in ice water
+- This comfortably covers the 1,848W initial cooldown load and the 100W maintenance load
+- A 360mm radiator provides additional headroom, particularly useful with phase-change blocks which have less uniform surface contact than liquid ice water
+
+---
+
+## Suit Fabric
+
+**Recommended: Cotton mesh**
+
+Cotton mesh is the best choice for this application because:
+- Breathable open weave allows direct skin contact with the cooling tubes
+- Cotton is comfortable and non-irritating against skin during extended wear
+- Natural fibre — does not trap heat against the body
+- Easy to sew channels or loops for routing the 6mm/9mm PVC hoses
+- Washable and durable
+
+**Construction:**
+- Sew hose channels directly into the mesh using a zigzag or channel stitch
+- Route hoses in parallel loops across the torso, back, and limbs as needed
+- Use metal hose barbs and manifolds at connection points — avoid plastic barbs which can crack under clamp pressure
+- Optional zone valves allow sections of the suit to be isolated, reducing flow to areas not needed
+
+---
+
+## Pump Selection
+
+**Requirements:**
+- 12V DC brushless, submersible rated
+- Flow rate: 4-5 liters/minute (minimum)
+- Continuous duty rated
+- PWM controllable (dedicated PWM signal wire preferred)
+- ½ inch inlet and outlet
+- Compatible with water/glycol mix
+
+**Search terms:**
+- "12V DC brushless submersible pump PWM 5LPM"
+- "12V DC pump 300LPH PWM control"
+
+Check aquarium suppliers, solar pump suppliers, and irrigation suppliers. Gear and diaphragm pumps handle PWM better than centrifugal types at this flow rate. Centrifugal pumps require priming and cannot be controlled as precisely.
+
+**PWM control note:** Many brushless pumps do not natively accept PWM. Use the BTS7960 module to chop power from the supply side, or specifically source pumps with a dedicated PWM input pin (separate from the power wires).
