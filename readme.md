@@ -29,6 +29,8 @@ The cooling loop is made of
   - [Preliminary Arduino Firmware](#preliminary-arduino-firmware)
 - [Required Hardware](#required-hardware)
 - [Electronics component list](component-list.md)
+  - [Assembly instructions](component-list.md#assembly-instructions)
+  - [Board placement guide (arduino-shield.jpg)](component-list.md#board-placement-guide)
   - [Ordering the PCB from Gerber files](component-list.md#ordering-the-pcb-from-gerber-files)
   - [Soldering and wire splicing](component-list.md#soldering-and-wire-splicing)
   - [How to solder (NASA reference)](component-list.md#how-to-solder)
@@ -196,19 +198,22 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 ## Required Hardware
 
 1. **Arduino Uno R3** — bottom of the stack; see [component list](component-list.md)
-2. [Heatsink control shield](arduino-shield/arduino-shield.pdf) — stacks on the Uno; order bare PCBs from [`arduino-shield/gerbers/`](arduino-shield/gerbers/) ([how to submit Gerbers](component-list.md#ordering-the-pcb-from-gerber-files)). New to soldering? **20 W iron** and NASA/splice guides in [component list — Soldering and wire splicing](component-list.md#soldering-and-wire-splicing)
+2. [Heatsink control shield](arduino-shield/arduino-shield.pdf) — stacks on the Uno; [placement diagram](arduino-shield/arduino-shield.jpg) shows part positions, diode direction, and **+** wire marks. Order bare PCBs from [`arduino-shield/gerbers/`](arduino-shield/gerbers/) ([how to submit Gerbers](component-list.md#ordering-the-pcb-from-gerber-files)), then follow [assembly instructions](component-list.md#assembly-instructions). New to soldering? **20 W iron** and NASA/splice guides in [component list — Soldering and wire splicing](component-list.md#soldering-and-wire-splicing)
 3. **LCD shield, 20×4, no buttons** — HD44780 display-only shield on top of the stack (not an LCD Keypad Shield)
 4. NTC thermistor, [Bosch M12](https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf) (see [Coolant plumbing](#coolant-plumbing) for mounting)
-5. Resistor **50 kΩ** (R1 on shield — top of NTC divider)
-6. Three **panel switches** on **SW1–SW3** (1×3 headers): two **100SP4T1B2M2QE** momentary (temp up/down), one **ANT13SECQE** maintained toggle (pump manual/auto). **Switch guards** (100SP / ANT compatible) recommended to prevent accidental actuation — especially on SW3
-7. 12V submersible pump (4–5 L/min) — switched by **Q1 TIP120 on D9** on the control shield (max **5A**)
-8. Optional: **5A inline fuses** on each 12V power cable branch (see [12V Power Setup](#12v-power-setup))
-9. Crimped leads / screw terminals for panel switches, NTC, and 12 V — see [component list](component-list.md)
-10. Hose clamps
-11. Assorted T-pieces, elbows, connectors, adapters, and tube barbs (metal or PETG — see [Coolant plumbing](#coolant-plumbing))
-12. Inhibited propylene glycol antifreeze (propylene, not ethylene) for 25–30% coolant mix
-13. Liquid gasket or PTFE thread tape for sealed joints
-14. Optional: small valves to control "zones"
+5. **R1** — **MFP50SBBE52-50K** (50 kΩ, 0.1%) — DigiKey **MFP50SBBE52-50K-ND**
+6. **D1–D3** — three **1N5407RL** flyback diodes — DigiKey **1N5407RL-ND** (or **1N5407RLG-ND** if unavailable)
+7. **2× M3 nylon bolt and nut** — mount **Q1** and **Q2** tabs only; **no metal** hardware (12 V)
+8. Shield stacking headers — DigiKey **1528-1074-ND** (Adafruit #85), one kit per bare control shield for Uno/LCD stack ([full DigiKey list](component-list.md#digikey-quick-order-bare-shield-populate))
+9. Three **panel switches** on **SW1–SW3** (1×3 headers): two **100SP4T1B2M2QE** momentary (temp up/down), one **ANT13SECQE** maintained toggle (pump manual/auto). **Switch guards** (100SP / ANT compatible) recommended to prevent accidental actuation — especially on SW3
+10. 12V submersible pump (4–5 L/min) — switched by **Q1 TIP120 on D9** on the control shield (max **5A**)
+11. Optional: **5A inline fuses** on each 12V power cable branch (see [12V Power Setup](#12v-power-setup))
+12. Crimped leads / screw terminals for panel switches, NTC, and 12 V — see [component list](component-list.md)
+13. Hose clamps
+14. Assorted T-pieces, elbows, connectors, adapters, and tube barbs (metal or PETG — see [Coolant plumbing](#coolant-plumbing))
+15. Inhibited propylene glycol antifreeze (propylene, not ethylene) for 25–30% coolant mix
+16. Liquid gasket or PTFE thread tape for sealed joints
+17. Optional: small valves to control "zones"
 
 ### Arduino stack and connections
 
@@ -222,7 +227,7 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 - D9 PWM drives **Q1 TIP120** on the shield — low-side switch for the pump (up to 5A)
 - D7 drives the **buzzer** alarm output
 - D8 drives **Q2 TIP120** for the spare 12V output
-- Q1 and Q2 are TO-220 packages bolted to **built-in copper thermal zones** on the control shield — **no add-on heatsinks** required; the PCB spreads heat from the transistor tabs
+- Q1 and Q2 are TO-220 packages clamped to **built-in copper thermal zones** with **M3 nylon bolt and nut** each — **no metal mounting hardware** (12 V on the tab). **No add-on heatsinks**; the PCB spreads heat from the transistor tabs
 
 ---
 
@@ -318,7 +323,7 @@ graph LR
 - The pump is switched by **Q1 TIP120 on the control shield** (D9 PWM) — do not connect pump current through Arduino pins
 - Q1 and Q2 are rated up to 5A; size the pump accordingly
 - Use appropriately rated wire gauge: 1.5mm² minimum for pump circuit, 0.5mm² for signal wiring
-- TIP120 transistors (Q1, Q2) mount to **copper thermal zones** on the shield PCB — no separate heatsinks needed
+- TIP120 transistors (Q1, Q2) mount to **copper thermal zones** on the shield PCB with **M3 nylon** bolt and nut — **do not use metal** fasteners at the tabs; no separate heatsinks needed
 
 **Battery sizing (portable use):**
 - Pump draw: approximately 3-5A at 12V = 36-60W (Q1 TIP120 and pump fuse at **5A max**)
@@ -337,6 +342,7 @@ graph LR
 - **Polarity:** Double-check **+12 V and GND** before connecting the battery. Reverse polarity can destroy the Arduino, shield, and pump controller.
 - **One common ground** for battery, Arduino stack, pump return, and Q1/Q2 switching. Do not rely on the suit or frame as a ground path.
 - **Pump current through Q1 only** — never through Arduino pins. The TIP120 switches the low side; the pump (+) comes from the fused 12 V bus.
+- **Q1 / Q2 tab fasteners:** **M3 nylon** bolt and nut only — **no metal** at the transistor tabs (live **12 V**).
 - **De-energize for wiring** — disconnect the battery or remove fuses when crimping, moving terminals, or opening the control enclosure.
 - **Strain relief and insulation** — no bare copper at the panel or inside the box; use screw terminals or crimps where possible. **Every soldered splice must be covered with heat-shrink** (the [splice reference video](component-list.md#soldering-and-wire-splicing) does not show this step). Tie down cables so connectors are not pulled loose in use.
 - **Coolant is conductive** — a glycol leak onto bare 12 V terminals can cause shorts, heating, or fire. Keep splices out of drip paths; wipe spills before re-energizing.
@@ -448,6 +454,7 @@ Two manifolds are needed: one splits flow from the supply line into the six para
 - Use liquid gasket or PTFE tape on all threaded connections
 - **Pressure-test** the completed loop before use and **monitor for leaks** during initial runs
 - Fix any weeping joints before relying on the system in service
+- Electronics build and bench test: [assembly instructions](component-list.md#assembly-instructions) (Steps 5–6)
 
 ---
 
