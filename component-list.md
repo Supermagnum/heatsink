@@ -94,16 +94,16 @@ End-to-end build for the **Arduino control unit** (Uno + heatsink control shield
 
 ### Board placement guide
 
-Use the silkscreen labels and polarity marks on the bare PCB. The render below matches the finished board layout (component side up, USB toward the **top** edge):
+Use the silkscreen labels and polarity marks on the bare PCB. This shield has **no USB** — only the **Arduino Uno** below it does. The render below is the **control shield alone** (component side up). Match its orientation: **D1** at the top of the diode column, **SW1–SW3** on the **right**, **stacking-header** holes along the long **top and bottom** edges:
 
 ![Heatsink control shield — component placement and polarity](arduino-shield/arduino-shield.jpg)
 
 | Label | Location on board | What to install / connect |
 | --- | --- | --- |
-| **D1, D2, D3** | Left column, three large diodes stacked vertically | **1N5407RL** — cathode **band toward the top edge** (same end as silkscreen **K** / +12 V side). |
+| **D1, D2, D3** | Left column (**D1** top, **D3** bottom) | **1N5407RL** — cathode **band toward D1** (same end as silkscreen **K** / +12 V side). |
 | **R1** | Below the diode column | **MFP50SBBE52-50K**, vertical axial. |
 | **BZ1** | Left side, round footprint | Polarized buzzer — **+** pin to marked **+** on silkscreen. |
-| **Q1, Q2** | Centre, on copper thermal areas | **TIP120** — package **flat on the board**, metal tab on copper, leads bent **90°** and soldered toward the **bottom** edge (Uno header side). **Q1** above **Q2**. Secure each tab with an **M3 nylon bolt and nut** through the tab hole — **never metal** (12 V present). |
+| **Q1, Q2** | Centre, on copper thermal areas | **TIP120** — package **flat on the board**, metal tab on copper, leads bent **90°** toward the **bottom** long edge (same side as in the image). **Q1** above **Q2**. Secure each tab with an **M3 nylon bolt and nut** through the tab hole — **never metal** (12 V present). |
 | **SW1, SW2, SW3** | Right edge, **three 3-pin blocks** in a row (top → bottom) | **1×3** sockets for panel switch cables — see [Step 3](#step-3--panel-switches-and-ntc). |
 | **TH1** | Four 2-pin blocks, left of SW column (top block) | NTC cable — **+** silkscreen marks sense/reference; other pin is GND. |
 | **J1, J2, J3** | Next blocks below **TH1** | Screw terminals — land **+12 V** on pins marked **+**; other pin is switched load or return per [Step 4](#step-4--12-v-power-and-pump). |
@@ -130,7 +130,7 @@ Only when you received a **bare PCB** from the [Gerber order](#ordering-the-pcb-
 | Order | Ref | Part | Notes |
 | --- | --- | --- | --- |
 | 1 | R1 | **MFP50SBBE52-50K** | Vertical axial in the **R1** footprint below **D3**; trim leads flush on the bottom. |
-| 2 | D1, D2, D3 | **1N5407RL** | In the left column (**D1** top, **D2** middle, **D3** bottom). **Cathode band toward the top edge** of the board (toward **K** / +12 V), as in [arduino-shield.jpg](arduino-shield/arduino-shield.jpg). |
+| 2 | D1, D2, D3 | **1N5407RL** | In the left column (**D1** top, **D2** middle, **D3** bottom). **Cathode band toward D1** (toward **K** / +12 V), as in [arduino-shield.jpg](arduino-shield/arduino-shield.jpg). |
 | 3 | BZ1 | **PS1240P02BT**-class buzzer | Round **BZ1** footprint on the left; align **+** on the part with the **+** mark on the board. |
 | 4 | SW1, SW2, SW3 | **1×3 pin sockets** (2.54 mm) | Three blocks on the **right** — **SW1** top, **SW2** middle, **SW3** bottom. |
 | 5 | TH1, J1, J2, J3 | **2-pin** terminals (Molex **393800102** class) | Four outlined pairs left of the switch column — **TH1** at top, then **J1**, **J2**, **J3**. Note each **+** mark for field wiring. |
@@ -143,8 +143,8 @@ Inspect joints under good light; fix bridges and cold joints. Compare the finish
 
 Stack order (**bottom → top**):
 
-1. **Arduino Uno R3** on the bench (USB port toward you is a common orientation).
-2. **Heatsink control shield** — press stacking headers fully onto the Uno; all pins should seat without force on bent leads.
+1. **Arduino Uno R3** on the bench (its **USB** port is on the Uno only — use any stable orientation).
+2. **Heatsink control shield** — match [arduino-shield.jpg](arduino-shield/arduino-shield.jpg) when populating; then press stacking headers fully onto the Uno; all pins should seat without force on bent leads.
 3. **LCD shield (20×4, no buttons)** — press onto the control shield. Do **not** use an LCD Keypad Shield (firmware expects external switches on **D2–D4**).
 
 Mount the stack in a **dry project box** on the harness or pack — never inside the ice cooler ([readme — dry locations](readme.md#12v-dc-safety-and-dry-locations)).
