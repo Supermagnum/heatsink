@@ -3,24 +3,23 @@
 // LCD1602 LDC
 // ── Pin assignments ───────────────────────────────────────────────────────────
 // LCD uses pins 12, 11, 10, 6, 5, 13
-// Buttons and other I/O use pins 2, 3, 4, 7, 8, 9 — no conflicts
-const int ntcPin             = A0;  // Vsense — R1/TH1; TH1 in collection manifold at suit
-const int pwmPin             = 9;   // PWM pin for pump control (BTS7960)
-const int alarmPin            = 7;   // TIP120 Q1 — automatic out-of-ice alarm (buzzer)
-const int sparePin            = 8;   // TIP120 Q2 — spare 12V output (not button-controlled)
-const int tempUpButton        = 2;   // Button: increase target temperature
-const int tempDownButton      = 3;   // Button: decrease target temperature
-const int pumpOverrideButton  = 4;   // Button: manual on/off pump override (BTS7960 on D9)
+// Switches and other I/O use pins 2, 3, 4, 7, 8, 9 — no conflicts
+const int ntcPin              = A0;  // Vsense — R1/TH1; TH1 in collection manifold at suit
+const int pwmPin              = 9;   // PWM pin — Q1 TIP120 pump driver on shield
+const int alarmPin            = 7;   // Buzzer — out-of-ice alarm (D7 on shield)
+const int sparePin            = 8;   // TIP120 Q2 — spare 12V output on shield
+const int tempUpSwitch        = 2;   // Momentary switch: increase target temperature
+const int tempDownSwitch      = 3;   // Momentary switch: decrease target temperature
+const int pumpOverrideSwitch  = 4;   // Maintained toggle: manual pump override (Q1 / D9)
 
-// Buttons are wired pin-to-switch-to-GND; internal pull-ups keep the pin HIGH
-// until the switch grounds it. Pressed = LOW.
-const int BUTTON_PRESSED = LOW;
+// Switches wire pin-to-GND; internal pull-ups keep the pin HIGH until closed. Active = LOW.
+const int SWITCH_ACTIVE = LOW;
 
 // ── Hardware constants ────────────────────────────────────────────────────────
 // NTC divider: AREF-voltage — R1 (50K) — A0 — TH1 (Bosch M12 NTC) — GND
 // AREF pin shares the divider supply; ADC uses it as the reference voltage.
 const int   resistorValue = 50000;  // R1, 50k ohm fixed resistor (top of divider)
-const int   debounceDelay = 50;     // Button debounce delay (ms)
+const int   debounceDelay = 50;     // Switch debounce delay (ms)
 
 // ── Smoothing constants ───────────────────────────────────────────────────────
 const float tau   = 15.0;           // Response time constant (seconds)
@@ -38,6 +37,8 @@ float         readTemp         = 20.0;
 int           pwmValue         = 0;
 bool          pumpManualActive = false;
 unsigned long lastDebounceTime = 0;
+bool          tempUpPrev       = false;
+bool          tempDownPrev     = false;
 
 // ── Alarm output timing (non-blocking) ───────────────────────────────────────
 const unsigned long alarmDelay    = 120000UL;
@@ -55,9 +56,9 @@ void setup() {
   pinMode(pwmPin,             OUTPUT);
   pinMode(alarmPin,           OUTPUT);
   pinMode(sparePin,           OUTPUT);
-  pinMode(tempUpButton,       INPUT_PULLUP);
-  pinMode(tempDownButton,     INPUT_PULLUP);
-  pinMode(pumpOverrideButton, INPUT_PULLUP);
+  pinMode(tempUpSwitch,       INPUT_PULLUP);
+  pinMode(tempDownSwitch,     INPUT_PULLUP);
+  pinMode(pumpOverrideSwitch, INPUT_PULLUP);
 
   digitalWrite(alarmPin, LOW);
   digitalWrite(sparePin, LOW);
@@ -77,20 +78,23 @@ void loop() {
 
   unsigned long now = millis();
 
-  if (digitalRead(tempUpButton) == BUTTON_PRESSED && (now - lastDebounceTime) > debounceDelay) {
+  bool tempUpActive   = digitalRead(tempUpSwitch) == SWITCH_ACTIVE;
+  bool tempDownActive = digitalRead(tempDownSwitch) == SWITCH_ACTIVE;
+
+  if (tempUpActive && !tempUpPrev && (now - lastDebounceTime) > debounceDelay) {
     targetTemp = min(targetTemp + 5, 25);
     lastDebounceTime = now;
   }
 
-  if (digitalRead(tempDownButton) == BUTTON_PRESSED && (now - lastDebounceTime) > debounceDelay) {
+  if (tempDownActive && !tempDownPrev && (now - lastDebounceTime) > debounceDelay) {
     targetTemp = max(targetTemp - 5, 15);
     lastDebounceTime = now;
   }
 
-  if (digitalRead(pumpOverrideButton) == BUTTON_PRESSED && (now - lastDebounceTime) > debounceDelay) {
-    pumpManualActive = !pumpManualActive;
-    lastDebounceTime = now;
-  }
+  tempUpPrev   = tempUpActive;
+  tempDownPrev = tempDownActive;
+
+  pumpManualActive = (digitalRead(pumpOverrideSwitch) == SWITCH_ACTIVE);
 
   updatePWM();
 

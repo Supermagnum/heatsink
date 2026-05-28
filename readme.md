@@ -28,8 +28,10 @@ The cooling loop is made of
   - [Coolant options](#coolant-options)
   - [Preliminary Arduino Firmware](#preliminary-arduino-firmware)
 - [Required Hardware](#required-hardware)
+- [Electronics component list](component-list.md)
 - [Wiring Diagram](#wiring-diagram)
 - [12V Power Setup](#12v-power-setup)
+  - [12V DC safety and dry locations](#12v-dc-safety-and-dry-locations)
 - [Container Setup](#container-setup)
 - [Suit Fabric](#suit-fabric)
 - [Coolant plumbing](#coolant-plumbing)
@@ -172,11 +174,12 @@ Mix with **distilled water** if buying full-strength concentrate; follow the lab
 
 ### Preliminary Arduino Firmware
 
-Two switches adjust coolant temperature between 15°C and 25°C in 5°C steps (up/down).  
-A third switch toggles manual pump override (full speed on D9, bypasses temperature control).  
-Two transistor-switched 12V outputs (TIP120 Darlington, replaces relay modules):
-- Output 1 (D7): activates if coolant temperature exceeds 30°C for a set time (buzzer alert — out-of-ice warning)
-- Output 2 (D8): spare 12V output (no firmware control)
+Two **momentary** switches adjust coolant temperature between 15°C and 25°C in 5°C steps (up/down).  
+A **maintained toggle** switch on D4 enables manual pump override (full PWM on D9); off returns to automatic temperature control.  
+Outputs on the [Arduino shield](arduino-shield/arduino-shield.pdf):
+- **D9 → Q1 (TIP120):** pump PWM (temperature-controlled, or manual override via D4)
+- **D7:** buzzer — out-of-ice alarm (>30°C for 2 minutes)
+- **D8 → Q2 (TIP120):** spare 12V output (not used in current firmware)
 
 LCD shows: target temperature, sensed temperature, current pump PWM.
 
@@ -187,37 +190,34 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 
 ## Required Hardware
 
-1. Arduino board (e.g., Arduino Uno)
-2. NTC thermistor, [Bosch M12](https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf) (see [Coolant plumbing](#coolant-plumbing) for mounting)
-3. Resistor (50k ohms)
-4. **LCD screen** — 20×4 character display, HD44780-compatible (LiquidCrystal library); shows target temp, coolant temp, pump PWM, and alarm status
-5. Three guarded STSP switches (temperature up, temperature down, manual pump override)
-6. Pump controlled via PWM (BTS7960 motor driver module)
-7. Two TIP120 Darlington transistors (TO-220) for 12V switched outputs (alarm buzzer and spare)
-8. Optional: TO-220 heatsinks and thermal compound (e.g. Arctic Silver, Noctua NT-H1) for Q1/Q2 — the shield PCB has mounting zones on the transistor tabs
-9. Optional: **5A inline fuses** on each 12V power cable branch (see [12V Power Setup](#12v-power-setup))
-10. Breadboard and connecting wire
-11. Hose clamps
-12. Assorted T-pieces, elbows, connectors, adapters, and tube barbs (metal or PETG — see [Coolant plumbing](#coolant-plumbing))
-13. Inhibited propylene glycol antifreeze (propylene, not ethylene) for 25–30% coolant mix
-14. Liquid gasket or PTFE thread tape for sealed joints
-15. Optional: small valves to control "zones"
+1. **Arduino Uno R3** — bottom of the stack; see [component list](component-list.md)
+2. [Heatsink control shield](arduino-shield/arduino-shield.pdf) — stacks on the Uno (Q1/Q2 TIP120, R1, TH1 and SW headers, buzzer, 12 V terminals); minimum soldering if ordered assembled. New to soldering? **20 W iron** and NASA/splice guides in [component list — Soldering and wire splicing](component-list.md#soldering-and-wire-splicing)
+3. **LCD shield, 20×4, no buttons** — HD44780 display-only shield on top of the stack (not an LCD Keypad Shield)
+4. NTC thermistor, [Bosch M12](https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf) (see [Coolant plumbing](#coolant-plumbing) for mounting)
+5. Resistor **50 kΩ** (R1 on shield — top of NTC divider)
+6. Three **panel switches** on **SW1–SW3** (1×3 headers): two **100SP4T1B2M2QE** momentary (temp up/down), one **ANT13SECQE** maintained toggle (pump manual/auto). **Switch guards** (100SP / ANT compatible) recommended to prevent accidental actuation — especially on SW3
+7. 12V submersible pump (4–5 L/min) — switched by **Q1 TIP120 on D9** on the control shield (max **5A**)
+8. Optional: **5A inline fuses** on each 12V power cable branch (see [12V Power Setup](#12v-power-setup))
+9. Crimped leads / screw terminals for panel switches, NTC, and 12 V — see [component list](component-list.md)
+10. Hose clamps
+11. Assorted T-pieces, elbows, connectors, adapters, and tube barbs (metal or PETG — see [Coolant plumbing](#coolant-plumbing))
+12. Inhibited propylene glycol antifreeze (propylene, not ethylene) for 25–30% coolant mix
+13. Liquid gasket or PTFE thread tape for sealed joints
+14. Optional: small valves to control "zones"
 
-### Recommended Additional Components
+### Arduino stack and connections
 
-- **Screw terminal shield** for Arduino (e.g., Seeed Studio Screw Shield) — secures all external wiring without breadboard connections that can vibrate loose
-- **BTS7960 43A Motor Driver Module** for pump PWM control — handles well over 12A, includes screw terminals, no soldering required
-- **LCD Keypad Shield** (e.g., DFRobot) — provides 4-line LCD and built-in buttons, replacing the 3 separate switches
-
-### Arduino Connections
+**Stack (bottom → top):** Arduino Uno R3 → heatsink control shield → **LCD shield without buttons**. Panel switches and NTC connect to the control shield headers/terminals only.
 
 - Bosch M12 NTC (TH1) and 50K resistor (R1) form a voltage divider on A0; AREF feeds the divider top and sets the ADC reference
-- **LCD screen** (20×4, HD44780) on D12, D11, D10, D6, D5, D13 — see [Wiring Diagram](#wiring-diagram)
-- Switches wired between digital pin and GND (active when grounded); firmware enables internal pull-ups on D2, D3, and D4
-- D4 toggles manual pump override on D9 (full PWM); when off, pump speed follows temperature
-- PWM pin (D9) connected to BTS7960 signal input
-- Digital pins D7 and D8 drive TIP120 transistor bases for the alarm and spare 12V outputs
-- Q1 and Q2 are TO-220 packages; the shield board has **heatsink mounting zones** on each tab — use thermal compound (e.g. Arctic Silver, Noctua NT-H1) between the transistor and an optional TO-220 heatsink if loads run warm
+- **LCD shield** (20×4, HD44780, **no keypad**) on D12, D11, D10, D6, D5, D13 — see [Wiring Diagram](#wiring-diagram)
+- Switches wired **pin → switch → GND** (active when grounded); firmware enables internal pull-ups on D2, D3, and D4
+- **D2 / D3:** momentary — one temperature step per actuation
+- **D4:** maintained toggle — ON = manual pump override, OFF = automatic
+- D9 PWM drives **Q1 TIP120** on the shield — low-side switch for the pump (up to 5A)
+- D7 drives the **buzzer** alarm output
+- D8 drives **Q2 TIP120** for the spare 12V output
+- Q1 and Q2 are TO-220 packages bolted to **built-in copper thermal zones** on the control shield — **no add-on heatsinks** required; the PCB spreads heat from the transistor tabs
 
 ---
 
@@ -230,15 +230,13 @@ graph TD
     PSU["12V PSU / Battery"]
 
     PSU -->|12V| ARD["Arduino Uno\n+ control shield"]
-    PSU -->|12V| BTS["BTS7960\npump driver"]
-    PSU -->|12V| Q1["TIP120 Q1\nalarm switch"]
-    PSU -->|12V| Q2["TIP120 Q2\nspare output"]
+    PSU -->|12V| Q1["TIP120 Q1\npump D9"]
+    PSU -->|12V| Q2["TIP120 Q2\nspare D8"]
 
-    ARD -->|D9 PWM| BTS
-    BTS -->|switched 12V| PUMP["Submersible pump\n4–5 L/min"]
+    ARD -->|D9 PWM| Q1
+    Q1 --> PUMP["Submersible pump\n4–5 L/min"]
 
-    ARD -->|D7| Q1
-    Q1 --> BUZ["Buzzer\nout-of-ice alarm"]
+    ARD -->|D7| BUZ["Buzzer\nout-of-ice alarm"]
     ARD -->|D8| Q2
     Q2 --> SPARE["Spare 12V load\n(no firmware control)"]
 
@@ -248,14 +246,13 @@ graph TD
     R1 --- TH1["TH1 Bosch M12 NTC\ncollection manifold\nat suit"]
     TH1 --> GND["Common GND"]
 
-    SW1["Temp up"] -->|D2 — GND when pressed| ARD
-    SW2["Temp down"] -->|D3 — GND when pressed| ARD
-    SW3["Pump override"] -->|D4 — GND when pressed| ARD
+    SW1["SW1 Temp up\nmomentary"] -->|D2 — GND when closed| ARD
+    SW2["SW2 Temp down\nmomentary"] -->|D3 — GND when closed| ARD
+    SW3["SW3 Pump override\nmaintained toggle"] -->|D4 — GND when ON| ARD
 
     LCD["LCD 20x4"] -->|D12 RS, D11 E, D10 D4\nD6 D5, D13 D7| ARD
 
     ARD --- GND
-    BTS --- GND
     Q1 --- GND
     Q2 --- GND
     PUMP --- GND
@@ -268,23 +265,25 @@ graph TD
 | --- | --- |
 | A0 | NTC sense (R1 / TH1 junction) |
 | AREF | Divider reference (same rail as R1 top) |
-| D2 | Target temperature up (+5°C) |
-| D3 | Target temperature down (−5°C) |
-| D4 | Manual pump override toggle (full PWM on D9) |
-| D7 | Q1 alarm driver (auto, >30°C for 2 min) |
+| D2 | SW1 momentary — target temperature up (+5°C per actuation) |
+| D3 | SW2 momentary — target temperature down (−5°C per actuation) |
+| D4 | SW3 maintained toggle — manual pump override (ON = full PWM) |
+| D7 | Buzzer alarm (auto, >30°C for 2 min) |
 | D8 | Q2 spare 12V output |
-| D9 | Pump PWM to BTS7960 |
+| D9 | Pump PWM via Q1 TIP120 |
 | D5, D6, D10–D13 | LCD data and control |
 
-**Buttons:** Each switch connects **pin → switch → GND**. Internal pull-ups are enabled in firmware (`INPUT_PULLUP`); pressed = LOW.
+**Switch wiring:** Panel switches **100SP4T1B2M2QE** (SW1, SW2) and **ANT13SECQE** (SW3) connect via **SW1–SW3** headers: **pin → switch → GND**. Internal pull-ups are enabled in firmware (`INPUT_PULLUP`); closed / ON = LOW. Add **switch guards** (100SP / ANT series) on the panel to reduce accidental toggles — especially on the pump override (SW3).
 
 **NTC placement:** TH1 threads into the **collection manifold** on the return path, positioned **as close to the suit as practical** — not in the insulated container. The sensor cable runs back to the Arduino shield.
 
 **NTC divider:** `AREF-voltage — R1 (50K) — A0 — TH1 (Bosch M12) — GND`. Firmware calls `analogReference(EXTERNAL)` so ADC readings match the divider supply.
 
-**Pump override (D4):** Toggles manual full-speed pump on D9 via BTS7960. When off, pump speed follows coolant temperature automatically.
+**Pump override (SW3 / D4):** Maintained toggle — **ON** = full pump PWM via Q1; **OFF** = automatic temperature control.
 
-**12V loads:** Pump current goes through the BTS7960 only — not through Arduino pins. Q1 and Q2 switch their loads low-side via TIP120. Add a **5A inline fuse** on each 12V feed (Arduino, BTS7960, TIP120 rail) if not already fused at the battery.
+**Temp switches (SW1 / SW2):** Momentary — one ±5°C step per actuation (debounced).
+
+**12V loads:** Pump current flows through **Q1** on the shield — not through Arduino I/O pins directly. Q2 switches the spare load. D7 drives the buzzer. Add a **5A inline fuse** on each 12V feed (Arduino, pump/Q1, Q2) if not already fused at the battery.
 
 ---
 
@@ -298,28 +297,67 @@ graph LR
     FUSE_MAIN --> BUS["12V Distribution Bus"]
 
     BUS --> FUSE_A["Fuse 5A"] --> ARD["Arduino + LCD\n(~1A max)"]
-    BUS --> FUSE_B["Fuse 5A"] --> BTS["BTS7960\npump driver\n(up to 5A)"]
-    BUS --> FUSE_C["Fuse 5A"] --> OUT["TIP120 outputs\n(alarm + spare)"]
+    BUS --> FUSE_B["Fuse 5A"] --> PUMP_RAIL["Q1 pump rail\n(up to 5A)"]
+    BUS --> FUSE_C["Fuse 5A"] --> Q2_RAIL["Q2 spare output"]
 
     GND["Common Ground Bus"] --- ARD
-    GND --- BTS
-    GND --- OUT
+    GND --- PUMP_RAIL
+    GND --- Q2_RAIL
     GND --- BAT
 ```
 
 **Notes:**
 - All components share a common ground
-- Use **5A inline fuses maximum** on each 12V power cable branch (battery lead plus Arduino, BTS7960, and TIP120 feeds). Do not exceed 5A fuse rating on these cables
+- Use **5A inline fuses maximum** on each 12V power cable branch (battery lead plus Arduino, pump/Q1, and Q2 feeds). Do not exceed 5A fuse rating on these cables
 - The Arduino can be powered directly from 12V via its barrel jack (onboard regulator handles 5V/3.3V internally)
-- The BTS7960 handles the high-current pump load — do not run the pump directly from the Arduino
+- The pump is switched by **Q1 TIP120 on the control shield** (D9 PWM) — do not connect pump current through Arduino pins
+- Q1 and Q2 are rated up to 5A; size the pump accordingly
 - Use appropriately rated wire gauge: 1.5mm² minimum for pump circuit, 0.5mm² for signal wiring
-- TIP120 transistors (Q1, Q2) mount in TO-220 footprints with heatsink pads on the shield — apply thermal compound under optional heatsinks if sustained load warrants it
+- TIP120 transistors (Q1, Q2) mount to **copper thermal zones** on the shield PCB — no separate heatsinks needed
 
 **Battery sizing (portable use):**
-- Pump draw: approximately 3-5A at 12V = 36-60W (size the BTS7960 branch fuse at **5A max**)
+- Pump draw: approximately 3-5A at 12V = 36-60W (Q1 TIP120 and pump fuse at **5A max**)
 - Arduino + transistors + LCD: approximately 0.3A = 4W
 - Total: approximately 4-5A continuous with a 5A fuse on the pump feed at the upper limit — avoid sustained overload
 - A 20Ah 12V LiFePO4 battery gives approximately 3-4 hours runtime, matching the phase-change block duration
+
+### 12V DC safety and dry locations
+
+12 V is low enough that it is not mains shock hazard, but this system can still draw **several amps continuously**. Treat wiring like any other DC power installation: fused, correct gauge, and kept away from coolant and condensation.
+
+**Electrical safety (12 V DC):**
+
+- **Fuse every branch** at **5 A maximum** (battery lead plus Arduino, pump/Q1, and Q2). Fuses protect wire and battery from shorts — not optional.
+- **Wire gauge:** **1.5 mm² minimum** on pump and battery feeds; **0.5 mm²** for signals. Undersized wire heats up under 3–5 A load.
+- **Polarity:** Double-check **+12 V and GND** before connecting the battery. Reverse polarity can destroy the Arduino, shield, and pump controller.
+- **One common ground** for battery, Arduino stack, pump return, and Q1/Q2 switching. Do not rely on the suit or frame as a ground path.
+- **Pump current through Q1 only** — never through Arduino pins. The TIP120 switches the low side; the pump (+) comes from the fused 12 V bus.
+- **De-energize for wiring** — disconnect the battery or remove fuses when crimping, moving terminals, or opening the control enclosure.
+- **Strain relief and insulation** — no bare copper at the panel or inside the box; use screw terminals or crimps where possible. **Every soldered splice must be covered with heat-shrink** (the [splice reference video](component-list.md#soldering-and-wire-splicing) does not show this step). Tie down cables so connectors are not pulled loose in use.
+- **Coolant is conductive** — a glycol leak onto bare 12 V terminals can cause shorts, heating, or fire. Keep splices out of drip paths; wipe spills before re-energizing.
+- **Batteries:** Use a proper 12 V pack (e.g. LiFePO4) with a BMS or charger matched to the chemistry. Do not short the terminals; store and charge in a dry, ventilated area away from flammable material.
+
+**Keep dry — control unit and related electronics:**
+
+Mount the **control unit** in a **dry enclosure** outside the ice container. It consists of:
+
+| Keep dry | Location |
+| --- | --- |
+| **Arduino Uno R3 + heatsink control shield + LCD shield** (stacked) | Inside a sealed project box or small case on the suit harness, belt, or backpack — **not** in the cooler |
+| **12 V battery** (if portable) | Same dry area as the control unit; protect from sweat, rain, and spills |
+| **Panel switches** (SW1–SW3) | On the operator panel; guards help mechanically — use splash-aware routing if exposed |
+| **NTC cable (TH1)** | Sensor threads into the **wet** manifold; only the **M12 sensor tip** sees coolant. The cable and connector back to the shield must stay **dry** — route upward from the manifold and seal the panel penetration |
+
+**Allowed to get wet (by design):**
+
+| Wet location | Parts |
+| --- | --- |
+| **Inside the insulated cooler** | Submersible pump, radiator, ice/slush, coolant hoses through the lid |
+| **Suit loop** | PVC hoses, manifolds, fittings, and the Bosch M12 sensing element in the collection manifold |
+
+Only **12 V pump power** and **coolant hoses** should pass through the cooler lid (grommeted or sealed). Run signal and Arduino power from the **dry control box** — do not submerge the stack, battery, or unsealed junctions. If the enclosure may see humidity, use vented or IP-rated boxes and keep connectors inside the lid line.
+
+See also [Container Setup](#container-setup) for lid penetrations and [component list](component-list.md) for stack parts.
 
 ---
 
@@ -352,7 +390,8 @@ graph TD
 - Use a quality foam-insulated cooler (camping/outdoor grade) with a good lid seal
 - The radiator sits at the bottom, fully submerged in ice water — this gives 5-10× better heat transfer than air cooling
 - The submersible pump also sits inside the container, drawing chilled water/glycol
-- All lid penetrations (hoses and power) should be sealed with silicone or grommets to prevent warm air ingress
+- All lid penetrations (hoses and **pump 12 V power only**) should be sealed with silicone or grommets to prevent warm air ingress and leaks
+- The **Arduino control unit** (stack, battery, dry wiring) stays **outside** the cooler — see [12V DC safety and dry locations](#12v-dc-safety-and-dry-locations)
 - Fill gaps around ice/phase-change blocks with water to maximise thermal contact with the radiator
 - The NTC sensor is **not** mounted in the container — it sits in the **collection manifold at the suit** (see [Coolant plumbing](#coolant-plumbing))
 
@@ -423,4 +462,4 @@ Two manifolds are needed: one splits flow from the supply line into the six para
 
 Check aquarium suppliers, solar pump suppliers, and irrigation suppliers. Gear and diaphragm pumps handle PWM better than centrifugal types at this flow rate. Centrifugal pumps require priming and cannot be controlled as precisely.
 
-**PWM control note:** Many brushless pumps do not natively accept PWM. Use the BTS7960 module to chop power from the supply side, or specifically source pumps with a dedicated PWM input pin (separate from the power wires).
+**PWM control note:** The shield uses **Q1 TIP120** on D9 for low-side PWM of the pump. Many brushless pumps tolerate slow PWM on the power side; if the pump stutters, try a pump with a dedicated PWM input wire or add a smoothing capacitor on the pump supply. Stay within the **5A** Q1 and fuse limit.

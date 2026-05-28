@@ -4373,7 +4373,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.nidec-components.com/e/catalog/switch/cas.pdf"
+		(property "Datasheet" "~"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -4397,7 +4397,6 @@
 				)
 			)
 		)
-		(property ki_fp_filters "*Nidec?Copal?CAS?120A*")
 		(path "/36766b62-1e1c-497e-988b-57c6747b75ea")
 		(sheetname "/")
 		(sheetfile "arduino-shield.kicad_sch")
