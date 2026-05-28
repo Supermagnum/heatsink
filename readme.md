@@ -14,7 +14,7 @@ I think that NASA just used ice, battery and a pump in those boxes, and you need
 A radiator for a CPU liquid cooler should be ideal. Hook that up to a aquarium pump or similar, and the heat exchanger/radiator that goes in a bucket of ice cubes or phase shifting material and water. The pump will need to be able to flow around 4 liters per minute, and must run on 12V and accept PWM control.
 
 The cooling loop is made of 
-6 pvc hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of propylene glycol and water mix. Brass or metal connectors, hose barbs, and hose clamps should be used. Two manifolds are required — one for liquid distribution and one for collection — built from T-pieces, elbows, and other fittings (see [Coolant plumbing](#coolant-plumbing) below).
+6 pvc hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of inhibited propylene glycol and water mix (25–30%). Brass or metal connectors, hose barbs, and hose clamps should be used. Two manifolds are required — one for liquid distribution and one for collection — built from T-pieces, elbows, and other fittings (see [Coolant plumbing](#coolant-plumbing) below).
 
 ## Table of contents
 
@@ -128,41 +128,43 @@ Arduino shield schematic: [arduino-shield.pdf](arduino-shield/arduino-shield.pdf
 
 Monitor the suit's output temperature and use PWM control to regulate pump speed.
 
-Why a ~50% **propylene glycol** and water mix? The ice bath and phase-change blocks can drive slush **below 0°C** at the heat exchanger; propylene glycol keeps the loop liquid and flowing. It is **much less toxic** than ethylene glycol (still not for drinking) — a better fit near a wearable loop. Use secure hose barbs and clamps, pressure-test the loop, and check concentration if slush temperatures go well below freezing.
+Why **inhibited propylene glycol** and water? The ice bath and phase-change blocks can drive slush **below 0°C** at the heat exchanger. A **25–30% PG mix** keeps the loop liquid while staying thin enough to pump through 6 mm hoses. Unlike ethylene glycol antifreeze, propylene glycol is **biodegradable and low-toxicity** — a better fit near a wearable loop (still not for drinking). Use secure hose barbs and clamps, pressure-test the loop, and increase PG percentage only if slush goes colder than your mix rating.
 
 ### Coolant options
 
-**Recommended (this project):** ~50% **propylene glycol** and distilled water. At roughly −12 to −15°C freeze point this covers light sub-zero slush; increase PG percentage if the exchanger sees colder slush.
+#### Recommended — inhibited propylene glycol + water (25–30% mix)
 
-**Other suitable alternatives**
+**Best balance of cost, safety, and compatibility for this build.**
+
+| Property | Detail |
+| --- | --- |
+| **Toxicity** | Non-toxic, food-grade safe. Used in RVs, food processing, and HVAC. Unlike ethylene glycol, PG is biodegradable and presents a much lower hazard to people and animals if spilled. |
+| **Hose / seal compatibility** | Compatible with typical cooling-system plastics and elastomers — PVC hose, pump seals, and brass barbs used in this project. |
+| **Freeze point** | ~**−10°C at 25%** PG — enough margin for light sub-zero slush without the extra viscosity and pumping cost of a 50% mix. Use **30%** if you need more headroom. |
+| **Electrical** | **Not dielectric** — conductivity is typically **>2,000 µS/cm** (water-based, conductive). Fine for a pumped hose loop; do not use near bare electronics expecting insulation. |
+| **Cost / availability** | Cheapest practical option. Sold as pre-mixed **inhibited** PG antifreeze under names such as **DOWFROST**, **AMSOIL ANT**, **Cryo-Tek**, or generic **RV / marine antifreeze** at hardware and auto stores. Confirm the label says **propylene glycol**, not ethylene glycol. |
+
+Mix with **distilled water** if buying full-strength concentrate; follow the label for your target freeze point.
+
+#### Optional — ElectroCool and similar synthetic fluids
+
+**ElectroCool** (Engineered Fluids) and similar **dielectric** immersion coolants are non-conductive and wash off with soap and water, but they are **much more expensive** and designed for electronics immersion — not as a default for this PVC-hose suit loop. Only consider if you validate compatibility with every hose, pump seal, and fitting, and accept the higher fluid cost.
+
+#### Other alternatives
 
 | Fluid | Notes |
 | --- | --- |
-| **USP / food-grade PG + water** | Same as above; buy PG and mix yourself. Lowest cost. |
-| **Packaged PG heat-transfer fluids** | Pre-mixed PG solutions with corrosion inhibitors and biocide (e.g. solar-loop or HVAC “safe” fluids). Check label for propylene glycol, not ethylene glycol. |
-| **Glycerol (glycerin) + water** | Non-toxic and biodegradable. Higher viscosity than PG — may reduce flow in 6 mm hoses; freeze protection per percent is weaker than PG. |
-| **Potassium acetate / formate HTF** | Used in some commercial low-toxicity antifreeze and ice-melt systems. Verify pump, hose, and brass compatibility before use. |
+| **USP / food-grade PG + water (DIY mix)** | Same family as above; buy PG concentrate and mix yourself. Lowest unit cost. |
+| **Glycerol (glycerin) + water** | Non-toxic and biodegradable. Higher viscosity — may reduce flow in 6 mm hoses; weaker freeze protection per percent than PG. |
+| **Potassium acetate / formate HTF** | Used in some commercial low-toxicity antifreeze systems. Verify pump, hose, and brass compatibility before use. |
 
-**Synthetic / immersion-style fluids**
+#### Not recommended for a wearable loop
 
-Data-center **immersion cooling** fluids (plant-based esters, PFAS-free synthetics, and similar engineered products) are often marketed as **non-toxic, biodegradable, and environmentally preferable** to mineral oil or legacy fluorinated fluids. Examples include bio-based dielectric esters and PFAS-free synthetic lines from specialty chemical suppliers.
+- **Ethylene glycol** (standard automotive antifreeze) — effective antifreeze but **acutely toxic**
+- **Legacy PFAS / fluorinated fluids** — environmental persistence and regulatory phase-out
+- **Plain water** — inadequate when slush goes below 0°C at the heat exchanger
 
-They can be a good choice **in their intended application** — sealed immersion tanks for electronics — but most are **not drop-in replacements** for this build:
-
-- Many are **dielectric oils or esters**, not water-glycol — different density, viscosity, and seal requirements
-- **PVC hose, brass barbs, and submersible pump seals** must be checked against the manufacturer’s compatibility list
-- **Cost** is typically much higher than PG and water
-- **Disposal** may require vendor or hazardous-waste guidance even when labeled biodegradable
-
-If you want a synthetic fluid here, only use one where the datasheet explicitly lists compatibility with your hose polymer, pump elastomers, brass/copper, and your temperature range (−10°C to +40°C loop). Prefer **water-based PG products** (including nano-enhanced PG coolants sold for liquid cooling) over full immersion oils unless you retest the whole plumbing path.
-
-**Not recommended for a wearable loop**
-
-- **Ethylene glycol** (standard automotive antifreeze) — effective antifreeze but toxic
-- **Legacy PFAS / fluorinated fluids** — strong thermal performance but environmental persistence and regulatory phase-out
-- **Plain water** — acceptable only if the loop is guaranteed to stay above ~4°C; inadequate when slush goes below 0°C
-
-**Fill and service**
+#### Fill and service
 
 - Use **distilled water** for mixing; tap water minerals cause scale and biofilm
 - Pressure-test after fill; monitor for leaks on first runs (see [Coolant plumbing](#coolant-plumbing))
@@ -195,8 +197,9 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 8. Breadboard and connecting wire
 9. Hose clamps
 10. Assorted T-pieces, elbows, connectors, adapters, and tube barbs (metal or PETG — see [Coolant plumbing](#coolant-plumbing))
-11. Liquid gasket or PTFE thread tape for sealed joints
-12. Optional: small valves to control "zones"
+11. Inhibited propylene glycol antifreeze (propylene, not ethylene) for 25–30% coolant mix
+12. Liquid gasket or PTFE thread tape for sealed joints
+13. Optional: small valves to control "zones"
 
 ### Recommended Additional Components
 
@@ -217,40 +220,66 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 
 ## Wiring Diagram
 
+Signal and power connections for the [Arduino shield](arduino-shield/arduino-shield.pdf). Ground all 12V loads to a common bus.
+
 ```mermaid
 graph TD
-    PSU["12V Power Supply / Battery"]
+    PSU["12V PSU / Battery"]
 
-    PSU -->|12V| ARD["Arduino Uno"]
-    PSU -->|12V| BTS["BTS7960 Motor Driver"]
-    PSU -->|12V| Q1["TIP120 Q1 — alarm"]
-    PSU -->|12V| Q2["TIP120 Q2 — spare"]
-    PSU -->|12V| PUMP["Submersible Pump\n(brushless 12V DC, PWM)"]
+    PSU -->|12V| ARD["Arduino Uno\n+ control shield"]
+    PSU -->|12V| BTS["BTS7960\npump driver"]
+    PSU -->|12V| Q1["TIP120 Q1\nalarm switch"]
+    PSU -->|12V| Q2["TIP120 Q2\nspare output"]
 
-    ARD -->|PWM signal D9| BTS
-    BTS -->|PWM-controlled 12V| PUMP
+    ARD -->|D9 PWM| BTS
+    BTS -->|switched 12V| PUMP["Submersible pump\n4–5 L/min"]
 
     ARD -->|D7| Q1
-    Q1 --> BUZ["Buzzer / Out-of-ice alarm"]
+    Q1 --> BUZ["Buzzer\nout-of-ice alarm"]
     ARD -->|D8| Q2
-    Q2 --> SPARE["Spare 12V output"]
+    Q2 --> SPARE["Spare 12V load\n(no firmware control)"]
 
     AREF["AREF-voltage"] -->|divider top + ADC ref| ARD
-    AREF --> R50["R1 50K"]
-    R50 -->|Vsense / A0| ARD
-    R50 --- TH1["NTC TH1\n(Bosch M12)"]
-    TH1 --> GND["GND"]
+    AREF --> R1["R1 50K"]
+    R1 -->|Vsense A0| ARD
+    R1 --- TH1["TH1 Bosch M12 NTC\nin coolant line"]
+    TH1 --> GND["Common GND"]
 
-    SW1["Switch: Temp Up"] -->|D2 to GND when pressed| ARD
-    SW2["Switch: Temp Down"] -->|D3 to GND when pressed| ARD
-    SW3["Switch: Pump override"] -->|D4 to GND when pressed| ARD
+    SW1["Temp up"] -->|D2 — GND when pressed| ARD
+    SW2["Temp down"] -->|D3 — GND when pressed| ARD
+    SW3["Pump override"] -->|D4 — GND when pressed| ARD
 
-    LCD["4-line LCD Display"] -->|Digital pins| ARD
+    LCD["LCD 20x4"] -->|D12 RS, D11 E, D10 D4\nD6 D5, D13 D7| ARD
+
+    ARD --- GND
+    BTS --- GND
+    Q1 --- GND
+    Q2 --- GND
+    PUMP --- GND
+    PSU --- GND
 ```
 
-**Button wiring:** Each switch connects one terminal to the Arduino digital pin (D2, D3, or D4) and the other to GND. No external resistors are needed; the firmware enables internal pull-ups so the pin reads HIGH until the switch is pressed.
+### Pin summary
 
-**NTC wiring:** AREF-voltage feeds the top of R1 (50K). The junction of R1 and TH1 (Bosch M12 NTC) is Vsense on A0. TH1 returns to GND. The same AREF-voltage is tied to the Arduino AREF pin; firmware calls `analogReference(EXTERNAL)` so ADC readings match the divider supply.
+| Pin | Function |
+| --- | --- |
+| A0 | NTC sense (R1 / TH1 junction) |
+| AREF | Divider reference (same rail as R1 top) |
+| D2 | Target temperature up (+5°C) |
+| D3 | Target temperature down (−5°C) |
+| D4 | Manual pump override toggle (full PWM on D9) |
+| D7 | Q1 alarm driver (auto, >30°C for 2 min) |
+| D8 | Q2 spare 12V output |
+| D9 | Pump PWM to BTS7960 |
+| D5, D6, D10–D13 | LCD data and control |
+
+**Buttons:** Each switch connects **pin → switch → GND**. Internal pull-ups are enabled in firmware (`INPUT_PULLUP`); pressed = LOW.
+
+**NTC divider:** `AREF-voltage — R1 (50K) — A0 — TH1 (Bosch M12) — GND`. Firmware calls `analogReference(EXTERNAL)` so ADC readings match the divider supply.
+
+**Pump override (D4):** Toggles manual full-speed pump on D9 via BTS7960. When off, pump speed follows coolant temperature automatically.
+
+**12V loads:** Pump current goes through the BTS7960 only — not through Arduino pins. Q1 and Q2 switch their loads low-side via TIP120.
 
 ---
 
@@ -376,7 +405,7 @@ Two manifolds are needed: one splits flow from the supply line into the six para
 - Continuous duty rated
 - PWM controllable (dedicated PWM signal wire preferred)
 - ½ inch inlet and outlet
-- Compatible with propylene glycol and water mix
+- Compatible with inhibited propylene glycol and water mix (25–30%)
 
 **Search terms:**
 - "12V DC brushless submersible pump PWM 5LPM"
