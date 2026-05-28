@@ -4,6 +4,21 @@ Bill of materials for the Arduino control side of the liquid cooling suit. Value
 
 **Assembly goal:** stack shields on an **Arduino Uno R3** with **minimum soldering** — plug-in headers and screw terminals for field wiring; only populate/solder the control shield PCB if you order it bare. If you are new to soldering, see [Soldering and wire splicing](#soldering-and-wire-splicing) below.
 
+## Table of contents
+
+- [Stack (bottom to top)](#stack-bottom-to-top)
+- [Core components](#core-components)
+- [Control shield](#control-shield-included-in-stack)
+- [Ordering the PCB from Gerber files](#ordering-the-pcb-from-gerber-files)
+- [Wire and cable](#wire-and-cable-minimum-soldering)
+- [Soldering and wire splicing](#soldering-and-wire-splicing)
+  - [How to solder (NASA reference)](#how-to-solder)
+  - [How to splice wire properly](#how-to-splice-wire-properly)
+  - [Heat-shrink on splices](#heat-shrink-on-splices)
+- [Quick wiring reference](#quick-wiring-reference)
+- [Suggested order checklist](#suggested-order-checklist)
+- [12 V safety and enclosure](#12-v-safety-and-enclosure)
+
 ---
 
 ## Stack (bottom to top)
@@ -40,6 +55,64 @@ External to the stack (crimp or screw terminals, no board soldering): **three pa
 | 1 | **Heatsink control shield** PCB | Order assembled if you want zero soldering; otherwise solder TIP120 (to copper thermal zones), R1, buzzer, and headers once. |
 | 1 | Buzzer (on shield) | TDK PS1240P02BT class, 12 mm, polarized — alarm on **D7** (>30 °C for 2 min). |
 
+See [Ordering the PCB from Gerber files](#ordering-the-pcb-from-gerber-files) to have bare boards fabricated.
+
+---
+
+## Ordering the PCB from Gerber files
+
+Production-ready Gerbers for the heatsink control shield are in the repo — you do **not** need KiCad to order boards. Use the files in:
+
+**[`arduino-shield/gerbers/`](arduino-shield/gerbers/)**
+
+### What is in the folder
+
+| File | Purpose |
+| --- | --- |
+| `arduino-shield-F_Cu.gbr` | Top copper |
+| `arduino-shield-B_Cu.gbr` | Bottom copper |
+| `arduino-shield-F_Mask.gbr` / `B_Mask.gbr` | Solder mask (top / bottom) |
+| `arduino-shield-F_Silkscreen.gbr` / `B_Silkscreen.gbr` | Silkscreen legend |
+| `arduino-shield-F_Paste.gbr` / `B_Paste.gbr` | Solder paste (for SMT assembly only — ignore if you hand-solder) |
+| `arduino-shield-Edge_Cuts.gbr` | Board outline |
+| `arduino-shield-PTH.drl` | Plated through-hole drill hits |
+| `arduino-shield-NPTH.drl` | Non-plated holes (if any) |
+| `arduino-shield-job.gbrjob` | Job metadata (layer stack, thickness) — optional but helps some fabs |
+
+Board spec from the job file: **2-layer FR4**, **1.6 mm** thick, outline roughly **92 × 61 mm** (Arduino Uno R3 shield form factor).
+
+### How to submit to a PCB fab
+
+1. **Download or clone** the repo and open `arduino-shield/gerbers/`.
+2. **Select all** `.gbr` and `.drl` files in that folder (include both drill files).
+3. **Zip** them into one archive (e.g. `arduino-shield-gerbers.zip`). Keep filenames unchanged — do not nest an extra subfolder unless the fab asks for it.
+4. **Upload** the zip to a board house (e.g. JLCPCB, PCBWay, OSH Park, Aisler, or any fab that accepts standard Gerber + Excellon drill).
+5. **Preview** the upload in the fab’s Gerber viewer before paying. Check outline, drill hits, and silkscreen alignment.
+6. **Choose fab options** (typical for this board):
+
+   | Option | Recommended |
+   | --- | --- |
+   | Layers | **2** |
+   | Thickness | **1.6 mm** |
+   | Material | **FR4** |
+   | Copper weight | **1 oz** (default) |
+   | Surface finish | **HASL** or **ENIG** (either is fine for through-hole) |
+   | Solder mask | Any colour (default green is fine) |
+   | Silkscreen | White or yellow on green mask |
+   | PCB assembly / SMT | **No** — this shield is **through-hole**; you populate it yourself (see [Soldering and wire splicing](#soldering-and-wire-splicing)) |
+
+7. **Quantity:** most fabs quote from **5 pcs** upward; one board is enough for a single suit, extras are spares.
+
+### After the boards arrive
+
+- Compare the bare PCB to [arduino-shield.pdf](arduino-shield/arduino-shield.pdf).
+- Solder TIP120 (Q1, Q2) to the **copper thermal zones**, R1, buzzer, Arduino stack headers, and connectors per the schematic PDF.
+- Stack on the Uno, add the LCD shield, then wire panel switches and 12 V externally.
+
+### Regenerating Gerbers (optional)
+
+The committed Gerbers match the shield design at export time. To produce a new set you need **KiCad 9** and the project in `arduino-shield/` — open `arduino-shield.kicad_pcb`, run **File → Fabrication Outputs → Gerbers**, and plot to `gerbers/` with drill files included. Only do this if you maintain your own fork of the PCB; the repo’s `gerbers/` folder is the canonical release for ordering.
+
 ---
 
 ## Wire and cable (minimum soldering)
@@ -67,15 +140,20 @@ External to the stack (crimp or screw terminals, no board soldering): **three pa
 
 If you order a **bare** control shield PCB, you will need to solder the through-hole parts (TIP120, R1, buzzer, headers). Panel and 12 V wiring can mostly use **crimps and screw terminals**; any soldered splices must use proper technique **and** heat-shrink insulation so joints stay reliable and safe under vibration and humidity.
 
-**How to solder (reference):** NASA training video — old but the workmanship standard is excellent:  
+### How to solder
+
+NASA training video — old but the workmanship standard is excellent:  
 [https://www.youtube.com/watch?v=_RXugDd0xik](https://www.youtube.com/watch?v=_RXugDd0xik)
 
-**How to splice wire properly (reference):**  
+### How to splice wire properly
+
 [https://www.youtube.com/watch?v=O-ymw7d_nYo](https://www.youtube.com/watch?v=O-ymw7d_nYo)
+
+### Heat-shrink on splices
 
 The splice video does **not** show finishing the joint — after soldering, **slide heat-shrink over the splice and shrink it fully** so no bare copper is exposed. Use tubing sized for your wire (typically slightly larger ID before shrinking); for 12 V runs, use heavier wall or double-layer shrink if the splice is in the harness. No exceptions for in-box or panel wiring.
 
-Prefer **screw terminals or crimp connectors** on 12 V and switch runs where you can and skip splices entirely. When you must splice, follow the splice video, then **always** heat-shrink. Work **de-energized** — battery disconnected and fuses out — see [12 V safety and enclosure](#12-v-safety-and-enclosure).
+Prefer **screw terminals or crimp connectors** on 12 V and switch runs where you can and skip splices entirely. When you must splice, follow the [splice video](#how-to-splice-wire-properly), then **always** heat-shrink. Work **de-energized** — battery disconnected and fuses out — see [12 V safety and enclosure](#12-v-safety-and-enclosure).
 
 ---
 
@@ -98,7 +176,7 @@ D7 → buzzer
 ## Suggested order checklist
 
 - [ ] Arduino Uno R3  
-- [ ] Heatsink control shield (assembled or bare PCB)  
+- [ ] Heatsink control shield — order bare PCB from [Gerber files](component-list.md#ordering-the-pcb-from-gerber-files) or populate one you already have  
 - [ ] LCD shield 20×4 **without buttons**  
 - [ ] 1× Bosch M12 NTC + M12 tap + thread sealant  
 - [ ] 2× 100SP4T1B2M2QE + guards  

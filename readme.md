@@ -29,6 +29,11 @@ The cooling loop is made of
   - [Preliminary Arduino Firmware](#preliminary-arduino-firmware)
 - [Required Hardware](#required-hardware)
 - [Electronics component list](component-list.md)
+  - [Ordering the PCB from Gerber files](component-list.md#ordering-the-pcb-from-gerber-files)
+  - [Soldering and wire splicing](component-list.md#soldering-and-wire-splicing)
+  - [How to solder (NASA reference)](component-list.md#how-to-solder)
+  - [How to splice wire properly](component-list.md#how-to-splice-wire-properly)
+  - [Heat-shrink on splices](component-list.md#heat-shrink-on-splices)
 - [Wiring Diagram](#wiring-diagram)
 - [12V Power Setup](#12v-power-setup)
   - [12V DC safety and dry locations](#12v-dc-safety-and-dry-locations)
@@ -191,7 +196,7 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 ## Required Hardware
 
 1. **Arduino Uno R3** — bottom of the stack; see [component list](component-list.md)
-2. [Heatsink control shield](arduino-shield/arduino-shield.pdf) — stacks on the Uno (Q1/Q2 TIP120, R1, TH1 and SW headers, buzzer, 12 V terminals); minimum soldering if ordered assembled. New to soldering? **20 W iron** and NASA/splice guides in [component list — Soldering and wire splicing](component-list.md#soldering-and-wire-splicing)
+2. [Heatsink control shield](arduino-shield/arduino-shield.pdf) — stacks on the Uno; order bare PCBs from [`arduino-shield/gerbers/`](arduino-shield/gerbers/) ([how to submit Gerbers](component-list.md#ordering-the-pcb-from-gerber-files)). New to soldering? **20 W iron** and NASA/splice guides in [component list — Soldering and wire splicing](component-list.md#soldering-and-wire-splicing)
 3. **LCD shield, 20×4, no buttons** — HD44780 display-only shield on top of the stack (not an LCD Keypad Shield)
 4. NTC thermistor, [Bosch M12](https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf) (see [Coolant plumbing](#coolant-plumbing) for mounting)
 5. Resistor **50 kΩ** (R1 on shield — top of NTC divider)
