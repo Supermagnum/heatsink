@@ -126,7 +126,7 @@ Use an automotive NTC temperature sensor and an Arduino to control temperature. 
 
 Arduino shield schematic: [arduino-shield.pdf](arduino-shield/arduino-shield.pdf) ([shield project folder](arduino-shield/))
 
-Monitor the suit's output temperature and use PWM control to regulate pump speed.
+Mount the Bosch M12 NTC in the **collection manifold** (return side), as close to the suit as possible — **not in the ice container**. This measures warm coolant leaving the suit for pump control. Use PWM to regulate pump speed from that reading.
 
 Why **inhibited propylene glycol** and water? The ice bath and phase-change blocks can drive slush **below 0°C** at the heat exchanger. A **25–30% PG mix** keeps the loop liquid while staying thin enough to pump through 6 mm hoses. Unlike ethylene glycol antifreeze, propylene glycol is **biodegradable and low-toxicity** — a better fit near a wearable loop (still not for drinking). Use secure hose barbs and clamps, pressure-test the loop, and increase PG percentage only if slush goes colder than your mix rating.
 
@@ -190,16 +190,18 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 1. Arduino board (e.g., Arduino Uno)
 2. NTC thermistor, [Bosch M12](https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf) (see [Coolant plumbing](#coolant-plumbing) for mounting)
 3. Resistor (50k ohms)
-4. 4-line LCD (compatible with LiquidCrystal library)
+4. **LCD screen** — 20×4 character display, HD44780-compatible (LiquidCrystal library); shows target temp, coolant temp, pump PWM, and alarm status
 5. Three guarded STSP switches (temperature up, temperature down, manual pump override)
 6. Pump controlled via PWM (BTS7960 motor driver module)
-7. Two TIP120 Darlington transistors for 12V switched outputs (alarm buzzer and spare)
-8. Breadboard and connecting wire
-9. Hose clamps
-10. Assorted T-pieces, elbows, connectors, adapters, and tube barbs (metal or PETG — see [Coolant plumbing](#coolant-plumbing))
-11. Inhibited propylene glycol antifreeze (propylene, not ethylene) for 25–30% coolant mix
-12. Liquid gasket or PTFE thread tape for sealed joints
-13. Optional: small valves to control "zones"
+7. Two TIP120 Darlington transistors (TO-220) for 12V switched outputs (alarm buzzer and spare)
+8. Optional: TO-220 heatsinks and thermal compound (e.g. Arctic Silver, Noctua NT-H1) for Q1/Q2 — the shield PCB has mounting zones on the transistor tabs
+9. Optional: **5A inline fuses** on each 12V power cable branch (see [12V Power Setup](#12v-power-setup))
+10. Breadboard and connecting wire
+11. Hose clamps
+12. Assorted T-pieces, elbows, connectors, adapters, and tube barbs (metal or PETG — see [Coolant plumbing](#coolant-plumbing))
+13. Inhibited propylene glycol antifreeze (propylene, not ethylene) for 25–30% coolant mix
+14. Liquid gasket or PTFE thread tape for sealed joints
+15. Optional: small valves to control "zones"
 
 ### Recommended Additional Components
 
@@ -210,11 +212,12 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 ### Arduino Connections
 
 - Bosch M12 NTC (TH1) and 50K resistor (R1) form a voltage divider on A0; AREF feeds the divider top and sets the ADC reference
-- LCD connected to appropriate digital pins
+- **LCD screen** (20×4, HD44780) on D12, D11, D10, D6, D5, D13 — see [Wiring Diagram](#wiring-diagram)
 - Switches wired between digital pin and GND (active when grounded); firmware enables internal pull-ups on D2, D3, and D4
 - D4 toggles manual pump override on D9 (full PWM); when off, pump speed follows temperature
 - PWM pin (D9) connected to BTS7960 signal input
 - Digital pins D7 and D8 drive TIP120 transistor bases for the alarm and spare 12V outputs
+- Q1 and Q2 are TO-220 packages; the shield board has **heatsink mounting zones** on each tab — use thermal compound (e.g. Arctic Silver, Noctua NT-H1) between the transistor and an optional TO-220 heatsink if loads run warm
 
 ---
 
@@ -242,7 +245,7 @@ graph TD
     AREF["AREF-voltage"] -->|divider top + ADC ref| ARD
     AREF --> R1["R1 50K"]
     R1 -->|Vsense A0| ARD
-    R1 --- TH1["TH1 Bosch M12 NTC\nin coolant line"]
+    R1 --- TH1["TH1 Bosch M12 NTC\ncollection manifold\nat suit"]
     TH1 --> GND["Common GND"]
 
     SW1["Temp up"] -->|D2 — GND when pressed| ARD
@@ -275,11 +278,13 @@ graph TD
 
 **Buttons:** Each switch connects **pin → switch → GND**. Internal pull-ups are enabled in firmware (`INPUT_PULLUP`); pressed = LOW.
 
+**NTC placement:** TH1 threads into the **collection manifold** on the return path, positioned **as close to the suit as practical** — not in the insulated container. The sensor cable runs back to the Arduino shield.
+
 **NTC divider:** `AREF-voltage — R1 (50K) — A0 — TH1 (Bosch M12) — GND`. Firmware calls `analogReference(EXTERNAL)` so ADC readings match the divider supply.
 
 **Pump override (D4):** Toggles manual full-speed pump on D9 via BTS7960. When off, pump speed follows coolant temperature automatically.
 
-**12V loads:** Pump current goes through the BTS7960 only — not through Arduino pins. Q1 and Q2 switch their loads low-side via TIP120.
+**12V loads:** Pump current goes through the BTS7960 only — not through Arduino pins. Q1 and Q2 switch their loads low-side via TIP120. Add a **5A inline fuse** on each 12V feed (Arduino, BTS7960, TIP120 rail) if not already fused at the battery.
 
 ---
 
@@ -289,12 +294,12 @@ graph TD
 graph LR
     BAT["12V Battery\nor PSU"]
 
-    BAT --> FUSE["Fuse\n(15A inline)"]
-    FUSE --> BUS["12V Distribution Bus"]
+    BAT --> FUSE_MAIN["Fuse 5A max\n(battery lead)"]
+    FUSE_MAIN --> BUS["12V Distribution Bus"]
 
-    BUS -->|12V / ~1A max| ARD["Arduino + shields\n(via 12V barrel jack)"]
-    BUS -->|12V / up to 12A| BTS["BTS7960\n(pump driver)"]
-    BUS -->|12V / ~0.2A| OUT["TIP120 outputs\n(alarm + spare)"]
+    BUS --> FUSE_A["Fuse 5A"] --> ARD["Arduino + LCD\n(~1A max)"]
+    BUS --> FUSE_B["Fuse 5A"] --> BTS["BTS7960\npump driver\n(up to 5A)"]
+    BUS --> FUSE_C["Fuse 5A"] --> OUT["TIP120 outputs\n(alarm + spare)"]
 
     GND["Common Ground Bus"] --- ARD
     GND --- BTS
@@ -304,15 +309,16 @@ graph LR
 
 **Notes:**
 - All components share a common ground
-- A 15A inline fuse protects the pump circuit
+- Use **5A inline fuses maximum** on each 12V power cable branch (battery lead plus Arduino, BTS7960, and TIP120 feeds). Do not exceed 5A fuse rating on these cables
 - The Arduino can be powered directly from 12V via its barrel jack (onboard regulator handles 5V/3.3V internally)
 - The BTS7960 handles the high-current pump load — do not run the pump directly from the Arduino
 - Use appropriately rated wire gauge: 1.5mm² minimum for pump circuit, 0.5mm² for signal wiring
+- TIP120 transistors (Q1, Q2) mount in TO-220 footprints with heatsink pads on the shield — apply thermal compound under optional heatsinks if sustained load warrants it
 
 **Battery sizing (portable use):**
-- Pump draw: approximately 3-5A at 12V = 36-60W
+- Pump draw: approximately 3-5A at 12V = 36-60W (size the BTS7960 branch fuse at **5A max**)
 - Arduino + transistors + LCD: approximately 0.3A = 4W
-- Total: approximately 4-6A continuous
+- Total: approximately 4-5A continuous with a 5A fuse on the pump feed at the upper limit — avoid sustained overload
 - A 20Ah 12V LiFePO4 battery gives approximately 3-4 hours runtime, matching the phase-change block duration
 
 ---
@@ -323,10 +329,9 @@ graph LR
 graph TD
     LID["Insulated Cooler Lid\n(15-20 litre cooler)"]
 
-    LID -->|Sealed penetrations| HOSE_IN["Coolant hose IN\n(from suit return)"]
-    LID -->|Sealed penetrations| HOSE_OUT["Coolant hose OUT\n(to suit supply)"]
+    LID -->|Sealed penetrations| HOSE_IN["Coolant hose IN\n(warm return from suit)"]
+    LID -->|Sealed penetrations| HOSE_OUT["Coolant hose OUT\n(chilled supply to suit)"]
     LID -->|Sealed penetrations| POWER["12V power cable\n(to pump)"]
-    LID -->|Sealed penetrations| SENSOR["NTC sensor cable"]
 
     subgraph CONTAINER["Insulated Container (interior)"]
         RAD["240mm PC Radiator\n(submerged, bottom-mounted)"]
@@ -347,9 +352,9 @@ graph TD
 - Use a quality foam-insulated cooler (camping/outdoor grade) with a good lid seal
 - The radiator sits at the bottom, fully submerged in ice water — this gives 5-10× better heat transfer than air cooling
 - The submersible pump also sits inside the container, drawing chilled water/glycol
-- All lid penetrations (hoses, cables, sensor) should be sealed with silicone or grommets to prevent warm air ingress
+- All lid penetrations (hoses and power) should be sealed with silicone or grommets to prevent warm air ingress
 - Fill gaps around ice/phase-change blocks with water to maximise thermal contact with the radiator
-- The NTC sensor tip routes through the lid to measure coolant temperature at the suit return line
+- The NTC sensor is **not** mounted in the container — it sits in the **collection manifold at the suit** (see [Coolant plumbing](#coolant-plumbing))
 
 **Radiator sizing:**
 - A 240mm radiator (air-rated ~300W) performs at approximately 1,500-3,000W when submerged in ice water
@@ -379,7 +384,12 @@ Cotton mesh is the best choice for this application because:
 
 ## Coolant plumbing
 
-Two manifolds are needed: one splits flow from the supply line into the six parallel suit hoses, and one merges the return lines back to the heat exchanger.
+Two manifolds are needed: one splits flow from the supply line into the six parallel suit hoses, and one merges the return lines back toward the heat exchanger.
+
+**NTC sensor placement:**
+- Install the Bosch M12 sensor (TH1) in the **collection manifold** — the return manifold where warmed coolant from the suit hoses combines
+- Place the port **as close to the suit as possible**, before the long hose run back to the container
+- The sensor measures coolant temperature **leaving the suit**, which is what the Arduino uses for pump control — not the chilled fluid inside the ice box
 
 **Fittings:**
 - Several T-pieces, elbows, and connectors sized for 6 mm ID / 9 mm OD hose

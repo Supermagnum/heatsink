@@ -4,7 +4,7 @@
 // ── Pin assignments ───────────────────────────────────────────────────────────
 // LCD uses pins 12, 11, 10, 6, 5, 13
 // Buttons and other I/O use pins 2, 3, 4, 7, 8, 9 — no conflicts
-const int ntcPin             = A0;  // Vsense — junction of R1 (50K) and Bosch M12 NTC
+const int ntcPin             = A0;  // Vsense — R1/TH1; TH1 in collection manifold at suit
 const int pwmPin             = 9;   // PWM pin for pump control (BTS7960)
 const int alarmPin            = 7;   // TIP120 Q1 — automatic out-of-ice alarm (buzzer)
 const int sparePin            = 8;   // TIP120 Q2 — spare 12V output (not button-controlled)
