@@ -1,18 +1,25 @@
 #include <LiquidCrystal.h>
 
+// LCD1602 LDC
 // ── Pin assignments ───────────────────────────────────────────────────────────
 // LCD uses pins 12, 11, 10, 6, 5, 13
 // Buttons and other I/O use pins 2, 3, 4, 7, 8, 9 — no conflicts
-const int ntcPin             = A0;  // Analog pin for NTC thermistor
+const int ntcPin             = A0;  // Vsense — junction of R1 (50K) and Bosch M12 NTC
 const int pwmPin             = 9;   // PWM pin for pump control (BTS7960)
-const int relay1Pin          = 7;   // Relay 1 — automatic out-of-ice alarm
-const int relay2Pin          = 8;   // Relay 2 — manual control via button
-const int tempUpButton       = 2;   // Button: increase target temperature
-const int tempDownButton     = 3;   // Button: decrease target temperature
-const int relayControlButton = 4;   // Button: toggle relay 2
+const int alarmPin            = 7;   // TIP120 Q1 — automatic out-of-ice alarm (buzzer)
+const int sparePin            = 8;   // TIP120 Q2 — spare 12V output (not button-controlled)
+const int tempUpButton        = 2;   // Button: increase target temperature
+const int tempDownButton      = 3;   // Button: decrease target temperature
+const int pumpOverrideButton  = 4;   // Button: manual on/off pump override (BTS7960 on D9)
+
+// Buttons are wired pin-to-switch-to-GND; internal pull-ups keep the pin HIGH
+// until the switch grounds it. Pressed = LOW.
+const int BUTTON_PRESSED = LOW;
 
 // ── Hardware constants ────────────────────────────────────────────────────────
-const int   resistorValue = 50000;  // 50k ohm fixed resistor in voltage divider
+// NTC divider: AREF-voltage — R1 (50K) — A0 — TH1 (Bosch M12 NTC) — GND
+// AREF pin shares the divider supply; ADC uses it as the reference voltage.
+const int   resistorValue = 50000;  // R1, 50k ohm fixed resistor (top of divider)
 const int   debounceDelay = 50;     // Button debounce delay (ms)
 
 // ── Smoothing constants ───────────────────────────────────────────────────────
@@ -29,10 +36,10 @@ const int  calibrationPoints  = 9;
 int           targetTemp       = 15;
 float         readTemp         = 20.0;
 int           pwmValue         = 0;
-bool          relay2Active     = false;
+bool          pumpManualActive = false;
 unsigned long lastDebounceTime = 0;
 
-// ── Relay 1 alarm timing (non-blocking) ──────────────────────────────────────
+// ── Alarm output timing (non-blocking) ───────────────────────────────────────
 const unsigned long alarmDelay    = 120000UL;
 unsigned long       overTempStart = 0;
 bool                overTempActive = false;
@@ -43,15 +50,17 @@ LiquidCrystal lcd(12, 11, 10, 6, 5, 13);
 // ─────────────────────────────────────────────────────────────────────────────
 void setup() {
   pinMode(ntcPin,             INPUT);
+  analogReference(EXTERNAL);
+
   pinMode(pwmPin,             OUTPUT);
-  pinMode(relay1Pin,          OUTPUT);
-  pinMode(relay2Pin,          OUTPUT);
+  pinMode(alarmPin,           OUTPUT);
+  pinMode(sparePin,           OUTPUT);
   pinMode(tempUpButton,       INPUT_PULLUP);
   pinMode(tempDownButton,     INPUT_PULLUP);
-  pinMode(relayControlButton, INPUT_PULLUP);
+  pinMode(pumpOverrideButton, INPUT_PULLUP);
 
-  digitalWrite(relay1Pin, LOW);
-  digitalWrite(relay2Pin, LOW);
+  digitalWrite(alarmPin, LOW);
+  digitalWrite(sparePin, LOW);
   analogWrite(pwmPin, 0);
 
   lcd.begin(20, 4);
@@ -68,19 +77,18 @@ void loop() {
 
   unsigned long now = millis();
 
-  if (digitalRead(tempUpButton) == LOW && (now - lastDebounceTime) > debounceDelay) {
+  if (digitalRead(tempUpButton) == BUTTON_PRESSED && (now - lastDebounceTime) > debounceDelay) {
     targetTemp = min(targetTemp + 5, 25);
     lastDebounceTime = now;
   }
 
-  if (digitalRead(tempDownButton) == LOW && (now - lastDebounceTime) > debounceDelay) {
+  if (digitalRead(tempDownButton) == BUTTON_PRESSED && (now - lastDebounceTime) > debounceDelay) {
     targetTemp = max(targetTemp - 5, 15);
     lastDebounceTime = now;
   }
 
-  if (digitalRead(relayControlButton) == LOW && (now - lastDebounceTime) > debounceDelay) {
-    relay2Active = !relay2Active;
-    digitalWrite(relay2Pin, relay2Active ? HIGH : LOW);
+  if (digitalRead(pumpOverrideButton) == BUTTON_PRESSED && (now - lastDebounceTime) > debounceDelay) {
+    pumpManualActive = !pumpManualActive;
     lastDebounceTime = now;
   }
 
@@ -91,11 +99,11 @@ void loop() {
       overTempActive = true;
       overTempStart  = millis();
     } else if ((millis() - overTempStart) >= alarmDelay) {
-      digitalWrite(relay1Pin, HIGH);
+      digitalWrite(alarmPin, HIGH);
     }
   } else {
     overTempActive = false;
-    digitalWrite(relay1Pin, LOW);
+    digitalWrite(alarmPin, LOW);
   }
 
   updateLCD();
@@ -103,7 +111,7 @@ void loop() {
   Serial.print("Target: ");  Serial.print(targetTemp);
   Serial.print(" Read: ");   Serial.print(readTemp);
   Serial.print(" PWM: ");    Serial.print(pwmValue);
-  Serial.print(" Relay2: "); Serial.println(relay2Active ? "ON" : "OFF");
+  Serial.print(" Manual: "); Serial.println(pumpManualActive ? "ON" : "OFF");
 
   delay((unsigned long)(dt * 1000));
 }
@@ -111,10 +119,10 @@ void loop() {
 // ─────────────────────────────────────────────────────────────────────────────
 float getTemperature() {
   int analogValue = analogRead(ntcPin);
-  if (analogValue == 0) return -40.0;
+  if (analogValue >= 1022) return -40.0;
 
-  float voltage    = analogValue * (5.0 / 1023.0);
-  float resistance = resistorValue * (voltage / (5.0 - voltage));
+  // Divider supply and ADC reference are both AREF-voltage, so use raw counts.
+  float resistance = resistorValue * ((float)analogValue / (1023.0 - analogValue));
 
   if (resistance >= resistanceValues[0])                    return (float)tempValues[0];
   if (resistance <= resistanceValues[calibrationPoints - 1]) return (float)tempValues[calibrationPoints - 1];
@@ -133,7 +141,9 @@ float getTemperature() {
 
 // ─────────────────────────────────────────────────────────────────────────────
 void updatePWM() {
-  if (readTemp > (float)targetTemp) {
+  if (pumpManualActive) {
+    pwmValue = 255;
+  } else if (readTemp > (float)targetTemp) {
     pwmValue = (int)map((long)(readTemp * 10),
                         (long)(targetTemp * 10),
                         (long)((targetTemp + 20) * 10),
@@ -165,8 +175,8 @@ void updateLCD() {
   lcd.print("%    ");
 
   lcd.setCursor(0, 3);
-  lcd.print("Relay2:");
-  lcd.print(relay2Active ? "ON " : "OFF");
+  lcd.print("Manual: ");
+  lcd.print(pumpManualActive ? "ON " : "OFF");
   lcd.print(" Alarm:");
-  lcd.print(digitalRead(relay1Pin) ? "ON " : "OFF");
+  lcd.print(digitalRead(alarmPin) ? "ON " : "OFF");
 }

@@ -14,7 +14,26 @@ I think that NASA just used ice, battery and a pump in those boxes, and you need
 A radiator for a CPU liquid cooler should be ideal. Hook that up to a aquarium pump or similar, and the heat exchanger/radiator that goes in a bucket of ice cubes or phase shifting material and water. The pump will need to be able to flow around 4 liters per minute, and must run on 12V and accept PWM control.
 
 The cooling loop is made of 
-6 pvc hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of water/glycol mix. Brass or metal connectors, hose barbs, liquid distribution manifolds with hose clamps should be used.
+6 pvc hoses in parallel, measuring 6 mm ØID x 9 mm ØOD, length 4 meters per hose. Total internal surface of the hoses is 4524.7 cm². External surface 6789.6 cm2. The heat exchanger as well as hoses and pump contain 3 liters of propylene glycol and water mix. Brass or metal connectors, hose barbs, and hose clamps should be used. Two manifolds are required — one for liquid distribution and one for collection — built from T-pieces, elbows, and other fittings (see [Coolant plumbing](#coolant-plumbing) below).
+
+## Table of contents
+
+- [Thermal Calculations](#thermal-calculations)
+  - [Cooling 3 liters from 40°C to 18°C](#cooling-3-liters-of-waterglycol-from-40c-to-18c-in-150-seconds)
+  - [Ice as a cooling medium](#ice-as-a-cooling-medium)
+  - [Maintaining 18°C coolant temperature](#maintaining-18c-coolant-temperature)
+  - [Liquid-to-ice heat exchanger](#liquid-to-ice-heat-exchanger)
+- [Phase-Change Materials](#phase-change-materials)
+- [Temperature Control](#temperature-control)
+  - [Coolant options](#coolant-options)
+  - [Preliminary Arduino Firmware](#preliminary-arduino-firmware)
+- [Required Hardware](#required-hardware)
+- [Wiring Diagram](#wiring-diagram)
+- [12V Power Setup](#12v-power-setup)
+- [Container Setup](#container-setup)
+- [Suit Fabric](#suit-fabric)
+- [Coolant plumbing](#coolant-plumbing)
+- [Pump Selection](#pump-selection)
 
 ---
 
@@ -103,20 +122,59 @@ https://www.cryopak.com/solutions/refrigerants/phase-change-materials/phase-5/
 
 To keep coolant at 18°C (0°C coolant is uncomfortable and risks hypothermia):
 
-Use an automotive NTC temperature sensor and an Arduino to control temperature:  
-https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf
+Use an automotive NTC temperature sensor and an Arduino to control temperature. Sensor datasheet: [Bosch M12 NTC temperature sensor (PDF)](https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf)
+
+Arduino shield schematic: [arduino-shield.pdf](arduino-shield/arduino-shield.pdf) ([shield project folder](arduino-shield/))
 
 Monitor the suit's output temperature and use PWM control to regulate pump speed.
 
-Why water/glycol mix? So that the liquid in the coolant loop does not freeze or turn to slush in the heat exchanger.
+Why a ~50% **propylene glycol** and water mix? The ice bath and phase-change blocks can drive slush **below 0°C** at the heat exchanger; propylene glycol keeps the loop liquid and flowing. It is **much less toxic** than ethylene glycol (still not for drinking) — a better fit near a wearable loop. Use secure hose barbs and clamps, pressure-test the loop, and check concentration if slush temperatures go well below freezing.
+
+### Coolant options
+
+**Recommended (this project):** ~50% **propylene glycol** and distilled water. At roughly −12 to −15°C freeze point this covers light sub-zero slush; increase PG percentage if the exchanger sees colder slush.
+
+**Other suitable alternatives**
+
+| Fluid | Notes |
+| --- | --- |
+| **USP / food-grade PG + water** | Same as above; buy PG and mix yourself. Lowest cost. |
+| **Packaged PG heat-transfer fluids** | Pre-mixed PG solutions with corrosion inhibitors and biocide (e.g. solar-loop or HVAC “safe” fluids). Check label for propylene glycol, not ethylene glycol. |
+| **Glycerol (glycerin) + water** | Non-toxic and biodegradable. Higher viscosity than PG — may reduce flow in 6 mm hoses; freeze protection per percent is weaker than PG. |
+| **Potassium acetate / formate HTF** | Used in some commercial low-toxicity antifreeze and ice-melt systems. Verify pump, hose, and brass compatibility before use. |
+
+**Synthetic / immersion-style fluids**
+
+Data-center **immersion cooling** fluids (plant-based esters, PFAS-free synthetics, and similar engineered products) are often marketed as **non-toxic, biodegradable, and environmentally preferable** to mineral oil or legacy fluorinated fluids. Examples include bio-based dielectric esters and PFAS-free synthetic lines from specialty chemical suppliers.
+
+They can be a good choice **in their intended application** — sealed immersion tanks for electronics — but most are **not drop-in replacements** for this build:
+
+- Many are **dielectric oils or esters**, not water-glycol — different density, viscosity, and seal requirements
+- **PVC hose, brass barbs, and submersible pump seals** must be checked against the manufacturer’s compatibility list
+- **Cost** is typically much higher than PG and water
+- **Disposal** may require vendor or hazardous-waste guidance even when labeled biodegradable
+
+If you want a synthetic fluid here, only use one where the datasheet explicitly lists compatibility with your hose polymer, pump elastomers, brass/copper, and your temperature range (−10°C to +40°C loop). Prefer **water-based PG products** (including nano-enhanced PG coolants sold for liquid cooling) over full immersion oils unless you retest the whole plumbing path.
+
+**Not recommended for a wearable loop**
+
+- **Ethylene glycol** (standard automotive antifreeze) — effective antifreeze but toxic
+- **Legacy PFAS / fluorinated fluids** — strong thermal performance but environmental persistence and regulatory phase-out
+- **Plain water** — acceptable only if the loop is guaranteed to stay above ~4°C; inadequate when slush goes below 0°C
+
+**Fill and service**
+
+- Use **distilled water** for mixing; tap water minerals cause scale and biofilm
+- Pressure-test after fill; monitor for leaks on first runs (see [Coolant plumbing](#coolant-plumbing))
+- Label the container and suit loop as containing glycol — not potable
 
 ### Preliminary Arduino Firmware
 
 Two switches adjust coolant temperature between 15°C and 25°C in 5°C steps (up/down).  
-A third switch starts the pump.  
-Two relay outputs:
-- Relay 1: activates if coolant temperature exceeds 30°C for a set time (buzzer alert — out of ice warning)
-- Relay 2: spare
+A third switch toggles manual pump override (full speed on D9, bypasses temperature control).  
+Two transistor-switched 12V outputs (TIP120 Darlington, replaces relay modules):
+- Output 1 (D7): activates if coolant temperature exceeds 30°C for a set time (buzzer alert — out-of-ice warning)
+- Output 2 (D8): spare 12V output (no firmware control)
 
 LCD shows: target temperature, sensed temperature, current pump PWM.
 
@@ -128,32 +186,32 @@ https://github.com/Supermagnum/heatsink/tree/main/firmware
 ## Required Hardware
 
 1. Arduino board (e.g., Arduino Uno)
-2. NTC thermistor, Bosch M12
+2. NTC thermistor, [Bosch M12](https://www.bosch-motorsport.com/content/downloads/Raceparts/Resources/pdf/Data%20sheet_70101387_Temperature_Sensor_NTC_M12.pdf) (see [Coolant plumbing](#coolant-plumbing) for mounting)
 3. Resistor (50k ohms)
 4. 4-line LCD (compatible with LiquidCrystal library)
-5. Three guarded STSP switches (temperature up, temperature down, relay control)
-6. Pump controlled via PWM, transistor able to handle 12A
-7. Two relays, 12V
+5. Three guarded STSP switches (temperature up, temperature down, manual pump override)
+6. Pump controlled via PWM (BTS7960 motor driver module)
+7. Two TIP120 Darlington transistors for 12V switched outputs (alarm buzzer and spare)
 8. Breadboard and connecting wire
-9. 3× 10K resistors
-10. Hose clamps
-11. Assorted size adapters and tube barbs in metal
+9. Hose clamps
+10. Assorted T-pieces, elbows, connectors, adapters, and tube barbs (metal or PETG — see [Coolant plumbing](#coolant-plumbing))
+11. Liquid gasket or PTFE thread tape for sealed joints
 12. Optional: small valves to control "zones"
 
 ### Recommended Additional Components
 
 - **Screw terminal shield** for Arduino (e.g., Seeed Studio Screw Shield) — secures all external wiring without breadboard connections that can vibrate loose
 - **BTS7960 43A Motor Driver Module** for pump PWM control — handles well over 12A, includes screw terminals, no soldering required
-- **Arduino Relay Shield** (4-relay, e.g., Seeed Studio or SainSmart) — covers the 2× 12V relay outputs
 - **LCD Keypad Shield** (e.g., DFRobot) — provides 4-line LCD and built-in buttons, replacing the 3 separate switches
 
 ### Arduino Connections
 
-- NTC thermistor and 50k resistor form a voltage divider connected to analog input
+- Bosch M12 NTC (TH1) and 50K resistor (R1) form a voltage divider on A0; AREF feeds the divider top and sets the ADC reference
 - LCD connected to appropriate digital pins
-- Switches connected to digital pins with pull-down resistors (10K)
-- PWM pin connected to BTS7960 signal input
-- Digital pins connected to relay control inputs
+- Switches wired between digital pin and GND (active when grounded); firmware enables internal pull-ups on D2, D3, and D4
+- D4 toggles manual pump override on D9 (full PWM); when off, pump speed follows temperature
+- PWM pin (D9) connected to BTS7960 signal input
+- Digital pins D7 and D8 drive TIP120 transistor bases for the alarm and spare 12V outputs
 
 ---
 
@@ -165,25 +223,34 @@ graph TD
 
     PSU -->|12V| ARD["Arduino Uno"]
     PSU -->|12V| BTS["BTS7960 Motor Driver"]
-    PSU -->|12V| REL["Relay Module (2x)"]
+    PSU -->|12V| Q1["TIP120 Q1 — alarm"]
+    PSU -->|12V| Q2["TIP120 Q2 — spare"]
     PSU -->|12V| PUMP["Submersible Pump\n(brushless 12V DC, PWM)"]
 
-    ARD -->|PWM signal| BTS
+    ARD -->|PWM signal D9| BTS
     BTS -->|PWM-controlled 12V| PUMP
 
-    ARD -->|Digital pin| REL
-    REL -->|Relay 1: alert| BUZ["Buzzer / Out-of-ice alarm"]
-    REL -->|Relay 2: spare| SPARE["Spare output"]
+    ARD -->|D7| Q1
+    Q1 --> BUZ["Buzzer / Out-of-ice alarm"]
+    ARD -->|D8| Q2
+    Q2 --> SPARE["Spare 12V output"]
 
-    NTC["NTC Thermistor\n(Bosch M12)"] -->|Voltage divider with 50K resistor| ARD
-    R50["50K Resistor"] --- NTC
+    AREF["AREF-voltage"] -->|divider top + ADC ref| ARD
+    AREF --> R50["R1 50K"]
+    R50 -->|Vsense / A0| ARD
+    R50 --- TH1["NTC TH1\n(Bosch M12)"]
+    TH1 --> GND["GND"]
 
-    SW1["Switch: Temp Up"] -->|Digital pin + 10K pulldown| ARD
-    SW2["Switch: Temp Down"] -->|Digital pin + 10K pulldown| ARD
-    SW3["Switch: Pump Start"] -->|Digital pin + 10K pulldown| ARD
+    SW1["Switch: Temp Up"] -->|D2 to GND when pressed| ARD
+    SW2["Switch: Temp Down"] -->|D3 to GND when pressed| ARD
+    SW3["Switch: Pump override"] -->|D4 to GND when pressed| ARD
 
     LCD["4-line LCD Display"] -->|Digital pins| ARD
 ```
+
+**Button wiring:** Each switch connects one terminal to the Arduino digital pin (D2, D3, or D4) and the other to GND. No external resistors are needed; the firmware enables internal pull-ups so the pin reads HIGH until the switch is pressed.
+
+**NTC wiring:** AREF-voltage feeds the top of R1 (50K). The junction of R1 and TH1 (Bosch M12 NTC) is Vsense on A0. TH1 returns to GND. The same AREF-voltage is tied to the Arduino AREF pin; firmware calls `analogReference(EXTERNAL)` so ADC readings match the divider supply.
 
 ---
 
@@ -198,11 +265,11 @@ graph LR
 
     BUS -->|12V / ~1A max| ARD["Arduino + shields\n(via 12V barrel jack)"]
     BUS -->|12V / up to 12A| BTS["BTS7960\n(pump driver)"]
-    BUS -->|12V / ~0.5A| REL["Relay module"]
+    BUS -->|12V / ~0.2A| OUT["TIP120 outputs\n(alarm + spare)"]
 
     GND["Common Ground Bus"] --- ARD
     GND --- BTS
-    GND --- REL
+    GND --- OUT
     GND --- BAT
 ```
 
@@ -215,7 +282,7 @@ graph LR
 
 **Battery sizing (portable use):**
 - Pump draw: approximately 3-5A at 12V = 36-60W
-- Arduino + relay + LCD: approximately 0.5A = 6W
+- Arduino + transistors + LCD: approximately 0.3A = 4W
 - Total: approximately 4-6A continuous
 - A 20Ah 12V LiFePO4 battery gives approximately 3-4 hours runtime, matching the phase-change block duration
 
@@ -276,8 +343,28 @@ Cotton mesh is the best choice for this application because:
 **Construction:**
 - Sew hose channels directly into the mesh using a zigzag or channel stitch
 - Route hoses in parallel loops across the torso, back, and limbs as needed
-- Use metal hose barbs and manifolds at connection points — avoid plastic barbs which can crack under clamp pressure
+- Connect the six suit hoses to distribution and collection manifolds (see [Coolant plumbing](#coolant-plumbing))
 - Optional zone valves allow sections of the suit to be isolated, reducing flow to areas not needed
+
+---
+
+## Coolant plumbing
+
+Two manifolds are needed: one splits flow from the supply line into the six parallel suit hoses, and one merges the return lines back to the heat exchanger.
+
+**Fittings:**
+- Several T-pieces, elbows, and connectors sized for 6 mm ID / 9 mm OD hose
+- Metal (brass) barbs and fittings are the most durable option
+- Manifolds can alternatively be **3D printed in PETG** if wall thickness and infill are high enough for pressure (typically 40% infill or higher, with solid perimeters around barb ports)
+
+**Bosch M12 sensor mounting (metal route):**
+- A suitable **drill and M12 tap** are required to thread the port for the Bosch M12 sensor
+- Seal threads with **liquid gasket** or **PTFE tape**
+
+**Assembly and testing:**
+- Use liquid gasket or PTFE tape on all threaded connections
+- **Pressure-test** the completed loop before use and **monitor for leaks** during initial runs
+- Fix any weeping joints before relying on the system in service
 
 ---
 
@@ -289,7 +376,7 @@ Cotton mesh is the best choice for this application because:
 - Continuous duty rated
 - PWM controllable (dedicated PWM signal wire preferred)
 - ½ inch inlet and outlet
-- Compatible with water/glycol mix
+- Compatible with propylene glycol and water mix
 
 **Search terms:**
 - "12V DC brushless submersible pump PWM 5LPM"
